@@ -15,6 +15,7 @@ localparam PAIR_W = $clog2(max_pair);
 
 reg [FFT_W-1:0] fft_level;
 reg [PAIR_W-1:0] but_level; // must be same width as ja and jb
+reg [4-1:0] twiddle_addr;
 
 reg [2*PAIR_W-1:0] ja_rot;  
 reg [2*PAIR_W-1:0] jb_rot;
@@ -43,8 +44,10 @@ always @(posedge clk) begin
 
    // circular rotation:
    // make double length so the left rotation doesn't lose bits
-   ja_rot = {(but_level << 1)       , (but_level << 1)        } << (fft_level);
-   jb_rot = {(but_level << 1) + 1'b1, (but_level << 1) + 1'b1 } << (fft_level);
+   ja_rot <= {(but_level << 1)       , (but_level << 1)        } << (fft_level);
+   jb_rot <= {(but_level << 1) + 1'b1, (but_level << 1) + 1'b1 } << (fft_level);
+
+   twiddle_addr <= but_level & (8'b11110000 >> fft_level);
 
 end
 
