@@ -1,0 +1,26 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Tue Jun  5 15:25:58 2018
+[*]
+[dumpfile] "/home/matt/work/fpga/fft/build/twiddle_rom.vcd"
+[dumpfile_mtime] "Tue Jun  5 15:25:38 2018"
+[dumpfile_size] 705
+[savefile] "/home/matt/work/fpga/fft/tests/gtk-twiddle_rom.gtkw"
+[timestart] 0
+[size] 1758 1127
+[pos] -1 -1
+*-3.386754 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] test.
+[sst_width] 253
+[signals_width] 195
+[sst_expanded] 1
+[sst_vpaned_height] 343
+@28
+test.dut.clk
+@22
+test.dut.addr[3:0]
+test.dut.dout_imaj[15:0]
+@23
+test.dut.dout_real[15:0]
+[pattern_trace] 1
+[pattern_trace] 0
