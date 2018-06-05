@@ -7,7 +7,7 @@ PROJ = $(BUILD_DIR)/fft
 PIN_DEF = $(SRC_DIR)/icestick.pcf
 SHELL := /bin/bash # Use bash syntax
 
-MODULES = twiddle_rom.v 
+MODULES = twiddle_rom.v, agu.v
 VERILOG = top.v $(MODULES)
 SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
 

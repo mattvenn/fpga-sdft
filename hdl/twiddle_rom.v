@@ -17,15 +17,13 @@ reg [data_width-1:0] rom_real [(1 << addr_width)-1:0];
 reg [data_width-1:0] rom_imaj [(1 << addr_width)-1:0];
 
 initial begin
-  if (FILE_REAL) $readmemh(FILE_REAL, rom_real);
-  if (FILE_IMAJ) $readmemh(FILE_IMAJ, rom_imaj);
+    if (FILE_REAL) $readmemh(FILE_REAL, rom_real);
+    if (FILE_IMAJ) $readmemh(FILE_IMAJ, rom_imaj);
 end
 
-always @(posedge clk)
-begin
+always @(posedge clk) begin
     dout_real = rom_real[addr];
     dout_imaj = rom_imaj[addr];
 end
 
 endmodule
-
