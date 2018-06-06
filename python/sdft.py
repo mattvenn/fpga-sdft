@@ -2,15 +2,13 @@
 from cmath import cos, sin, pi
 from scipy import signal
 import numpy as np
+
 N = 128
 coeffs = []
-icoeffs = []
 freqs = []
 in_s = []
-newest_data = complex(0,0)
-oldest_data = complex(0,0)
-idx = 0
 sig_counter = 0
+
 
 def init_coeffs():
     for i in range(N):
@@ -24,8 +22,9 @@ def sdft():
     for i in range(N):
         freqs[i] =  (freqs[i] + delta) * coeffs[i]
 
-init_coeffs()
 
+# initialise
+init_coeffs()
 t = np.linspace(0, 1, N, endpoint=False)
 sig_in = signal.square(8 * pi * 2 * t)
 #sig_in = np.sin(14 * pi * 2 * t)
@@ -33,18 +32,21 @@ sig_in = signal.square(8 * pi * 2 * t)
 for i in range(N):
     freqs.append(complex(0,0))
     in_s.append(complex(0,0))
-
     
 
+# run the loop
 for i in range(N*40):
+    # rotate in new sample
     for i in range(N-1, 0, -1):
         in_s[i] = in_s[i-1]
     in_s[0] = complex(sig_in[sig_counter % N],0)
 
     sig_counter += 1
 
+    # run the sdft
     sdft()
 
+# plot the results and compare with numpy's fft
 import matplotlib.pyplot as plt
 fig = plt.figure()
 ax = fig.add_subplot(2,2,3)
