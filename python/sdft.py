@@ -2,7 +2,7 @@
 from cmath import cos, sin, pi
 from scipy import signal
 import numpy as np
-N = 32
+N = 128
 coeffs = []
 icoeffs = []
 freqs = []
@@ -14,57 +14,63 @@ sig_counter = 0
 
 def init_coeffs():
     for i in range(N):
-        a = -2.0 * pi * i  / N
-        coeffs.append(complex(cos(a),sin(a)))
-    for i in range(N):
         a = 2.0 * pi * i  / N
-        icoeffs.append(complex(cos(a),sin(a)))
+        coeffs.append(complex(cos(a),sin(a)))
+    print(coeffs)
 
 
 def sdft():
-    global newest_data, oldest_data, idx
-    delta = newest_data - oldest_data
-    print(delta)
-    ci = 0
+    delta = in_s[0] - in_s[N-1]
     for i in range(N):
-        freqs[i] += delta * coeffs[ci]
-        ci += idx
-        if ci >= N:
-            ci -= N
+        freqs[i] =  (freqs[i] + delta) * coeffs[i]
 
 init_coeffs()
-print(coeffs, icoeffs)
-t = np.linspace(0, 1, N*3, endpoint=False)
-sig_in = signal.square(2 * pi * 2 * t)
-sig_in = np.sin(12 * pi * 2 * t)
-print(sig_in)
+
+t = np.linspace(0, 1, N, endpoint=False)
+sig_in = signal.square(8 * pi * 2 * t)
+#sig_in = np.sin(14 * pi * 2 * t)
+
 for i in range(N):
     freqs.append(complex(0,0))
     in_s.append(complex(0,0))
 
-def add_data():
-    global sig_counter, oldest_data, newest_data, idx
-    oldest_data = in_s[idx]
-    in_s[idx] = complex(sig_in[sig_counter],0)
-    newest_data = in_s[idx]
-    delta = newest_data - oldest_data
-    print(delta)
-    sig_counter += 1
     
 
-for i in range(N*2):
-    add_data()
+for i in range(N*40):
+    for i in range(N-1, 0, -1):
+        in_s[i] = in_s[i-1]
+    in_s[0] = complex(sig_in[sig_counter % N],0)
+
+    sig_counter += 1
 
     sdft()
 
-    idx += 1
-    if idx >= N:
-        idx = 0
-
-
 import matplotlib.pyplot as plt
-print(freqs)
-plt.plot(range(N), freqs)
-#plt.plot(range(N), sig_in[0:N])
+fig = plt.figure()
+ax = fig.add_subplot(2,2,3)
+plot_freqs = []
+for i in range(N):
+    plot_freqs.append(abs(freqs[i]))
+    
+ax.plot(range(N), plot_freqs)
+ax.set_title("sliding dft")
+
+ax = fig.add_subplot(2,2,4)
+ax.plot(range(N), np.fft.fft(sig_in[0:N]))
+ax.set_title("numpy fft")
+
+ax = fig.add_subplot(2,2,1)
+ax.plot(range(N), sig_in[0:N])
+ax.set_title("input signal")
+
+ax = fig.add_subplot(2,2,2)
+coeff_r = []
+coeff_i = []
+
+for i in range(N):
+    coeff_r.append( coeffs[i].real)
+    coeff_i.append( coeffs[i].imag)
+ax.plot(coeff_r, coeff_i)
+ax.set_title("coeffs/twiddles")
+
 plt.show()
-#plt.ylim(-2, 2)
