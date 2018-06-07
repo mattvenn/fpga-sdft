@@ -2,21 +2,21 @@
 
 having a go at some DSP on an FPGA. I'm basing the design on this paper:
 
-http://web.mit.edu/6.111/www/f2017/handouts/FFTtutorial121102.pdf
+http://www.comm.toronto.edu/~dimitris/ece431/slidingdft.pdf
 
-![overview](docs/overview.png)
+This is a sliding discrete Fourier transform. It requires two real adds and one complex multiply per frequency bin. The transform is run for every new sample taken.
+
+![overview](docs/sdft.png)
 
 # Done
 
 * Read the resources
 * Implement HDL twiddle factor ROM
-* Implement HDL AGU
+* Implement an [SDFT in Python](python/sdft.py) using the same pattern
 
 # Todo
 
-* Implement an FFT in Python using the same pattern
-* Implement HDL butterfly computation
-* Implement the 2 memory blocks
+* Implement algo on FPGA
 
 # Resources
 
