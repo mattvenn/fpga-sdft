@@ -7,9 +7,12 @@ module sdft
     parameter FILE_IMAJ = "hdl/twiddle_imag.list"
 )
 (
-    input wire                  clk,
-    input wire signed [data_width-1:0] sample
+    input wire                          clk,
+    input wire signed [data_width-1:0]  sample,
+    output wire                         out
 );
+
+    assign out = frequency_bins_real[0][0];
 
     // width of addr needed to address the frequency bins
     localparam bin_addr_w = $clog2(freq_bins);
@@ -67,7 +70,7 @@ module sdft
         for(j = 0; j < freq_bins; j = j + 1)  begin
             frequency_bins_real[j] <= (frequency_bins_real[j] + delta) * twiddle_rom_real[j] - (frequency_bins_imag[j] * twiddle_rom_imag[j]);
 
-            frequency_bins_imag[j] <= frequency_bins_real[j] * twiddle_rom_imag[j] + frequency_bins_imag[j] * twiddle_rom_real[j];
+            frequency_bins_imag[j] <= (frequency_bins_real[j] + delta) * twiddle_rom_imag[j] + (frequency_bins_imag[j] * twiddle_rom_real[j]);
         end
     end
 

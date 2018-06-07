@@ -12,6 +12,8 @@ module test;
             $dumpvars(1, dut.samples[i]);
             $dumpvars(2, dut.frequency_bins_real[i]);
             $dumpvars(3, dut.frequency_bins_imag[i]);
+            $dumpvars(4, dut.twiddle_rom_real[i]);
+            $dumpvars(5, dut.twiddle_rom_imag[i]);
         end
         for (i = 0; i < 100; i = i + 1) begin
             sample <= -1;
