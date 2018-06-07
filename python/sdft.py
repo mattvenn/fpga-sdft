@@ -1,9 +1,10 @@
+from __future__ import print_function
 # https://stackoverflow.com/questions/6663222/doing-fft-in-realtime
 from cmath import cos, sin, pi
 from scipy import signal
 import numpy as np
 
-N = 128
+N = 16
 coeffs = []
 freqs = []
 in_s = []
@@ -13,8 +14,9 @@ sig_counter = 0
 def init_coeffs():
     for i in range(N):
         a = 2.0 * pi * i  / N
-        coeffs.append(complex(cos(a),sin(a)))
-    print(coeffs)
+        coeff = complex(cos(a),sin(a))
+        coeffs.append(coeff)
+        print(coeff)
 
 
 def sdft(delta):
@@ -25,7 +27,7 @@ def sdft(delta):
 # initialise
 init_coeffs()
 t = np.linspace(0, 1, N, endpoint=False)
-sig_in = signal.square(8 * pi * 2 * t)
+sig_in = signal.square(2 * pi * 2 * t)
 #sig_in = np.sin(14 * pi * 2 * t)
 
 for i in range(N):
@@ -34,7 +36,9 @@ for i in range(N):
     
 
 # run the loop
-for i in range(N*40):
+freq_hist = []
+for i in range(N*2):
+    freq_hist.append(list(freqs))
     # rotate in new sample
     last = in_s[N-1]
     for i in range(N-1, 0, -1):
@@ -43,10 +47,19 @@ for i in range(N*40):
 
     sig_counter += 1
 
+
     # run the sdft
     delta = in_s[0] - last
     sdft(delta)
 
+print("dumping frequency history:")
+for f in range(N):
+    print("%2d : " % f, end='')
+    for i in range(32):
+        print("%5.1f" % abs(freq_hist[i][f]), end='')
+    print()
+
+exit()
 # plot the results and compare with numpy's fft
 import matplotlib.pyplot as plt
 fig = plt.figure()

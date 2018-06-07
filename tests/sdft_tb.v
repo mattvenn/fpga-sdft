@@ -16,9 +16,9 @@ module test;
             $dumpvars(5, dut.twiddle_rom_imag[i]);
         end
         for (i = 0; i < 100; i = i + 1) begin
-            sample <= -1;
+            sample <= -64;
             # 4;
-            sample <= +1;
+            sample <= +64;
             # 4;
         end
         $finish;
