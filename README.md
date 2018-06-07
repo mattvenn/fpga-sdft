@@ -8,6 +8,8 @@ This is a sliding discrete Fourier transform. It requires two real adds and one 
 
 ![overview](docs/sdft.png)
 
+![sdft vs fft](docs/fft_vs_sdft.png)
+
 # Done
 
 * Read the resources
