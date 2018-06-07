@@ -1,0 +1,86 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Thu Jun  7 17:00:16 2018
+[*]
+[dumpfile] "/home/matt/work/fpga/fft/build/sdft.vcd"
+[dumpfile_mtime] "Thu Jun  7 16:51:20 2018"
+[dumpfile_size] 7055
+[savefile] "/home/matt/work/fpga/fft/tests/gtk-sdft.gtkw"
+[timestart] 0
+[size] 1883 1037
+[pos] -491 -319
+*-7.386754 435 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] test.
+[treeopen] test.dut.
+[sst_width] 385
+[signals_width] 475
+[sst_expanded] 1
+[sst_vpaned_height] 312
+@28
+test.clk
+@420
+test.dut.sample[7:0]
+@22
+test.dut.sample_index[3:0]
+@200
+-
+@420
+test.dut.\samples[0][7:0]
+test.dut.\samples[1][7:0]
+test.dut.\samples[2][7:0]
+test.dut.\samples[3][7:0]
+test.dut.\samples[4][7:0]
+test.dut.\samples[5][7:0]
+test.dut.\samples[6][7:0]
+test.dut.\samples[7][7:0]
+test.dut.\samples[8][7:0]
+test.dut.\samples[9][7:0]
+test.dut.\samples[10][7:0]
+test.dut.\samples[11][7:0]
+test.dut.\samples[12][7:0]
+test.dut.\samples[13][7:0]
+test.dut.\samples[14][7:0]
+test.dut.\samples[15][7:0]
+@200
+-
+-
+@22
+test.dut.sample_index[3:0]
+@421
+test.dut.\frequency_bins_imag[0][15:0]
+test.dut.\frequency_bins_imag[1][15:0]
+test.dut.\frequency_bins_imag[2][15:0]
+test.dut.\frequency_bins_imag[3][15:0]
+test.dut.\frequency_bins_imag[4][15:0]
+test.dut.\frequency_bins_imag[5][15:0]
+test.dut.\frequency_bins_imag[6][15:0]
+test.dut.\frequency_bins_imag[7][15:0]
+test.dut.\frequency_bins_imag[8][15:0]
+test.dut.\frequency_bins_imag[9][15:0]
+test.dut.\frequency_bins_imag[10][15:0]
+test.dut.\frequency_bins_imag[11][15:0]
+test.dut.\frequency_bins_imag[12][15:0]
+test.dut.\frequency_bins_imag[13][15:0]
+test.dut.\frequency_bins_imag[14][15:0]
+test.dut.\frequency_bins_imag[15][15:0]
+@200
+-
+@420
+test.dut.\frequency_bins_real[0][15:0]
+test.dut.\frequency_bins_real[1][15:0]
+test.dut.\frequency_bins_real[2][15:0]
+test.dut.\frequency_bins_real[3][15:0]
+test.dut.\frequency_bins_real[4][15:0]
+test.dut.\frequency_bins_real[5][15:0]
+test.dut.\frequency_bins_real[6][15:0]
+test.dut.\frequency_bins_real[7][15:0]
+test.dut.\frequency_bins_real[8][15:0]
+test.dut.\frequency_bins_real[9][15:0]
+test.dut.\frequency_bins_real[10][15:0]
+test.dut.\frequency_bins_real[11][15:0]
+test.dut.\frequency_bins_real[12][15:0]
+test.dut.\frequency_bins_real[13][15:0]
+test.dut.\frequency_bins_real[14][15:0]
+test.dut.\frequency_bins_real[15][15:0]
+[pattern_trace] 1
+[pattern_trace] 0
