@@ -10,6 +10,13 @@ This is a sliding discrete Fourier transform. It requires two real adds and one 
 
 ![sdft vs fft](docs/fft_vs_sdft.png)
 
+# Makefile
+
+* make show-sdft - use yosys show to see how the design is inferred
+* make debug-sdft - use iverilog, vvp and gtkwave to show the results of the testbench
+* make - build everything
+* make prog - program the icestick
+
 # Done
 
 * Read the resources

@@ -11,7 +11,7 @@ MODULES = twiddle_rom.v, sdft.v
 VERILOG = top.v $(MODULES)
 SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
 
-all: $(PROJ).bin $(PROJ).rpt 
+all: $(PROJ).bin $(PROJ).rpt $(BUILD_DIR)/twiddle_imag.list
 
 # $@ The file name of the target of the rule.rule
 # $< first pre requisite
@@ -42,11 +42,14 @@ $(BUILD_DIR)/%.vcd: $(BUILD_DIR)/%.out
 	vvp $< -fst
 	mv test.vcd $@
 
-twiddle:
+$(BUILD_DIR)/twiddle_imag.list: python/gen_twiddle.py
 	cd hdl; ../python/gen_twiddle.py
 
 debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw
 	gtkwave $^
+
+show-%: $(SRC_DIR)/%.v
+	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed"
 
 clean:
 	rm -f $(BUILD_DIR)/*
