@@ -2,15 +2,27 @@ set_io --warn-no-port LED 95 # centre green
 set_io --warn-no-port clk 21
 
 
-set_io --warn-no-port samp[0] 44
-set_io --warn-no-port samp[1] 45
-set_io --warn-no-port samp[2] 47
-set_io --warn-no-port samp[3] 48
 
 
-set_io --warn-no-port r 78
-set_io --warn-no-port g 79
-set_io --warn-no-port b 80
-set_io --warn-no-port hsync 87
-set_io --warn-no-port vsync 88
+set_io --warn-no-port hsync 119
+set_io --warn-no-port vsync 118
+set_io --warn-no-port r 117
+set_io --warn-no-port g 116
+set_io --warn-no-port b 115
+
+
+
+set_io --warn-no-port adc[7] 78
+set_io --warn-no-port adc[6] 87
+set_io --warn-no-port adc[5] 79
+set_io --warn-no-port adc[4] 88
+set_io --warn-no-port adc[3] 80
+set_io --warn-no-port adc[2] 90
+set_io --warn-no-port adc[1] 81
+set_io --warn-no-port adc[0] 91
+
+set_io --warn-no-port adc_clk 44
+
+
+
 

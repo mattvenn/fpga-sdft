@@ -21,7 +21,7 @@ module top (
     reg [7:0] sample;
     
     // sample once per screen update
-    assign adc_clk = vsync;
+    assign adc_clk = hsync;
     always @(posedge adc_clk)
         sample <= adc;
 
@@ -67,22 +67,22 @@ module top (
     assign g = r;
     assign b = r;
    
-    assign r = (y_px > 0  && y_px < 10 && x_px < freqs_0); 
-    assign r = (y_px > 10 && y_px < 20 && x_px < freqs_1); 
-    assign r = (y_px > 20 && y_px < 30 && x_px < freqs_2); 
-    assign r = (y_px > 30 && y_px < 40 && x_px < freqs_3); 
-    assign r = (y_px > 40 && y_px < 50 && x_px < freqs_4); 
-    assign r = (y_px > 50 && y_px < 60 && x_px < freqs_5); 
-    assign r = (y_px > 60 && y_px < 70 && x_px < freqs_6); 
-    assign r = (y_px > 70 && y_px < 80 && x_px < freqs_7); 
-    assign r = (y_px > 80 && y_px < 90 && x_px < freqs_8); 
-    assign r = (y_px > 90 && y_px < 100 && x_px < freqs_9); 
-    assign r = (y_px > 100 && y_px < 110 && x_px < freqs_10); 
-    assign r = (y_px > 110 && y_px < 120 && x_px < freqs_11); 
-    assign r = (y_px > 120 && y_px < 130 && x_px < freqs_12); 
-    assign r = (y_px > 130 && y_px < 140 && x_px < freqs_13); 
-    assign r = (y_px > 140 && y_px < 150 && x_px < freqs_14); 
-    assign r = (y_px > 150 && y_px < 160 && x_px < freqs_15); 
+    assign r = activevideo && (y_px > 0  && y_px < 10 ) && (x_px < freqs_0); 
+    assign r = activevideo && (y_px > 10 && y_px < 20 ) && (x_px < freqs_1); 
+    assign r = activevideo && (y_px > 20 && y_px < 30 ) && (x_px < freqs_2); 
+    assign r = activevideo && (y_px > 30 && y_px < 40 ) && (x_px < freqs_3); 
+    assign r = activevideo && (y_px > 40 && y_px < 50 ) && (x_px < freqs_4); 
+    assign r = activevideo && (y_px > 50 && y_px < 60 ) && (x_px < freqs_5); 
+    assign r = activevideo && (y_px > 60 && y_px < 70 ) && (x_px < freqs_6); 
+    assign r = activevideo && (y_px > 70 && y_px < 80 ) && (x_px < freqs_7); 
+    assign r = activevideo && (y_px > 80 && y_px < 90 ) && (x_px < freqs_8); 
+    assign r = activevideo && (y_px > 90 && y_px < 100 ) && (x_px < freqs_9); 
+    assign r = activevideo && (y_px > 100 && y_px < 110 ) && (x_px < freqs_10); 
+    assign r = activevideo && (y_px > 110 && y_px < 120 ) && (x_px < freqs_11); 
+    assign r = activevideo && (y_px > 120 && y_px < 130 ) && (x_px < freqs_12); 
+    assign r = activevideo && (y_px > 130 && y_px < 140 ) && (x_px < freqs_13); 
+    assign r = activevideo && (y_px > 140 && y_px < 150 ) && (x_px < freqs_14); 
+    assign r = activevideo && (y_px > 150 && y_px < 160 ) && (x_px < freqs_15); 
                 
 
 
