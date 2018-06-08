@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
-[*] Thu Jun  7 17:57:11 2018
+[*] Fri Jun  8 16:17:58 2018
 [*]
 [dumpfile] "/home/matt/work/fpga/fft/build/sdft.vcd"
-[dumpfile_mtime] "Thu Jun  7 17:37:01 2018"
-[dumpfile_size] 12237
+[dumpfile_mtime] "Fri Jun  8 16:17:42 2018"
+[dumpfile_size] 30870
 [savefile] "/home/matt/work/fpga/fft/tests/gtk-sdft.gtkw"
 [timestart] 0
 [size] 1883 1476
-[pos] -1 -1
-*-3.386754 4 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] 1017 64
+*-4.386754 47 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.dut.
 [sst_width] 385
@@ -18,50 +18,18 @@
 [sst_vpaned_height] 466
 @28
 test.clk
-@420
-test.dut.sample[7:0]
 @22
 test.dut.sample_index[3:0]
+@420
+test.dut.sample[15:0]
+test.dut.delta[15:0]
 @200
 -
-@421
-test.dut.\twiddle_rom_real[0][7:0]
-@420
-test.dut.\twiddle_rom_real[1][7:0]
-test.dut.\twiddle_rom_real[2][7:0]
-test.dut.\twiddle_rom_real[3][7:0]
-test.dut.\twiddle_rom_real[4][7:0]
-test.dut.\twiddle_rom_real[5][7:0]
-test.dut.\twiddle_rom_real[6][7:0]
-test.dut.\twiddle_rom_real[7][7:0]
-test.dut.\twiddle_rom_real[8][7:0]
-test.dut.\twiddle_rom_real[9][7:0]
-test.dut.\twiddle_rom_real[10][7:0]
-test.dut.\twiddle_rom_real[11][7:0]
-test.dut.\twiddle_rom_real[12][7:0]
-test.dut.\twiddle_rom_real[13][7:0]
-test.dut.\twiddle_rom_real[14][7:0]
-test.dut.\twiddle_rom_real[15][7:0]
+@25
+test.freqs_0[15:0]
+test.freqs_1[15:0]
 @200
 -
-@420
-test.dut.\samples[0][7:0]
-test.dut.\samples[1][7:0]
-test.dut.\samples[2][7:0]
-test.dut.\samples[3][7:0]
-test.dut.\samples[4][7:0]
-test.dut.\samples[5][7:0]
-test.dut.\samples[6][7:0]
-test.dut.\samples[7][7:0]
-test.dut.\samples[8][7:0]
-test.dut.\samples[9][7:0]
-test.dut.\samples[10][7:0]
-test.dut.\samples[11][7:0]
-test.dut.\samples[12][7:0]
-test.dut.\samples[13][7:0]
-test.dut.\samples[14][7:0]
-test.dut.\samples[15][7:0]
-@200
 -
 -
 @22

@@ -56,10 +56,9 @@ print("dumping frequency history:")
 for f in range(N):
     print("%2d : " % f, end='')
     for i in range(32):
-        print("%5.1f" % abs(freq_hist[i][f]), end='')
+        print("(%4.1f,%4.1f)" % (freq_hist[i][f].real, freq_hist[i][f].imag), end='')
     print()
 
-exit()
 # plot the results and compare with numpy's fft
 import matplotlib.pyplot as plt
 fig = plt.figure()
