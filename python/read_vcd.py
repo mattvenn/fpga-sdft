@@ -27,7 +27,7 @@ for i in range(16):
     print("%2d: " % i, end='')
     count = 0
     for i, j in zip(reals, imags):
-        if count > 180:
+        if count > len(reals) - 20:
             print("%6.1f " % abs(complex(i,j)), end='')
         count +=1
     print()
