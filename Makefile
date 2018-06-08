@@ -48,6 +48,12 @@ $(BUILD_DIR)/twiddle_imag.list: python/gen_twiddle.py
 debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw
 	gtkwave $^
 
+debug-complex:
+	iverilog -o $(BUILD_DIR)/test $(TEST_DIR)/complex_tb.v
+	vvp $(BUILD_DIR)/test -fst
+	mv test.vcd $(BUILD_DIR)/
+	gtkwave $(BUILD_DIR)/test.vcd $(TEST_DIR)/gtk-complex.gtkw
+
 show-%: $(SRC_DIR)/%.v
 	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed"
 
@@ -57,4 +63,4 @@ clean:
 	rm -f $(SVG_PORT_DIR)/*svg
 
 .SECONDARY:
-.PHONY: all prog clean
+
