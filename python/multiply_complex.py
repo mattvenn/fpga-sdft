@@ -3,7 +3,10 @@ from cmath import cos, sin, pi
 from scipy import signal
 import numpy as np
 
-N = 16
+size = 5
+rotations = range(5)
+
+N = size * size
 coeffs = []
 freqs = []
 in_s = []
@@ -19,16 +22,18 @@ def init_coeffs():
 init_coeffs()
 import matplotlib.pyplot as plt
 
-fig, ax = plt.subplots(nrows=4, ncols=4) #subplot_kw=dict(projection='polar'))
+fig, ax = plt.subplots(nrows=size, ncols=size) #subplot_kw=dict(projection='polar'))
 plot_num = 0
 for row in ax:
     for col in row:
-        print(coeffs[plot_num])
-        x = [coeffs[plot_num].real, (coeffs[plot_num] * coeffs[plot_num]).real]  
-        y = [coeffs[plot_num].imag, (coeffs[plot_num] * coeffs[plot_num]).imag]  
-        col.plot(x, y, marker='o', markersize=2)
-        col.set_ylim([-2,2])
-        col.set_xlim([-2,2])
+        points = [coeffs[plot_num]]
+        for r in rotations:
+            points.append(points[r] * coeffs[plot_num])
+        reals = [p.real for p in points]
+        imags = [p.imag for p in points]
+        col.plot(reals, imags, marker='o', markersize=3)
+        col.set_ylim([-1.2,1.2])
+        col.set_xlim([-1.2,1.2])
         plot_num += 1
 
 plt.show()
