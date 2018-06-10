@@ -6,8 +6,9 @@ BUILD_DIR = build
 PROJ = $(BUILD_DIR)/fft
 PIN_DEF = $(SRC_DIR)/icestick.pcf
 SHELL := /bin/bash # Use bash syntax
+ICESTORM_DIR = ~/.apio/packages/toolchain-icestorm/bin/
 
-MODULES = sdft.v VgaSyncGen.v
+MODULES = sdft.v VgaSyncGen.v twiddle_rom.v
 VERILOG = top.v $(MODULES)
 SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
 
@@ -19,7 +20,7 @@ all: $(BUILD_DIR)/twiddle_imag.list $(PROJ).bin $(PROJ).rpt
 
 # rules for building the blif file
 $(BUILD_DIR)/%.blif: $(SRC)
-	yosys -p "synth_ice40 -top top -blif $@" $^
+	$(ICESTORM_DIR)/yosys -p "synth_ice40 -top top -blif $@" $^ | tee $(BUILD_DIR)/build.log
 
 # asc
 $(BUILD_DIR)/%.asc: $(PIN_DEF) $(BUILD_DIR)/%.blif

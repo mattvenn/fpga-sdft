@@ -29,36 +29,12 @@ module top (
     wire [15:0] freqs_1;
     wire [15:0] freqs_2;
     wire [15:0] freqs_3;
-    wire [15:0] freqs_4;
-    wire [15:0] freqs_5;
-    wire [15:0] freqs_6;
-    wire [15:0] freqs_7;
-    wire [15:0] freqs_8;
-    wire [15:0] freqs_9;
-    wire [15:0] freqs_10;
-    wire [15:0] freqs_11;
-    wire [15:0] freqs_12;
-    wire [15:0] freqs_13;
-    wire [15:0] freqs_14;
-    wire [15:0] freqs_15;
 
-    sdft #( .data_width(8), .freq_bins(16)) sdft_0(.clk (adc_clk), .sample(sample), 
-        .freqs_0(freqs_0), 
+    sdft #( .data_width(8), .freq_bins(16)) sdft_0(.clk (adc_clk), .sample(sample),
+        .freqs_0(freqs_0),
         .freqs_1(freqs_1),
         .freqs_2(freqs_2),
         .freqs_3(freqs_3),
-        .freqs_4(freqs_4),
-        .freqs_5(freqs_5),
-        .freqs_6(freqs_6),
-        .freqs_7(freqs_7),
-        .freqs_8(freqs_8),
-        .freqs_9(freqs_9),
-        .freqs_10(freqs_10),
-        .freqs_11(freqs_11),
-        .freqs_12(freqs_12),
-        .freqs_13(freqs_13),
-        .freqs_14(freqs_14),
-        .freqs_15(freqs_15)
         
         ); 
 
@@ -67,23 +43,11 @@ module top (
     assign g = r;
     assign b = r;
    
-    assign r = (y_px > 0  && y_px < 10 && x_px < freqs_0); 
-    assign r = (y_px > 10 && y_px < 20 && x_px < freqs_1); 
-    assign r = (y_px > 20 && y_px < 30 && x_px < freqs_2); 
-    assign r = (y_px > 30 && y_px < 40 && x_px < freqs_3); 
-    assign r = (y_px > 40 && y_px < 50 && x_px < freqs_4); 
-    assign r = (y_px > 50 && y_px < 60 && x_px < freqs_5); 
-    assign r = (y_px > 60 && y_px < 70 && x_px < freqs_6); 
-    assign r = (y_px > 70 && y_px < 80 && x_px < freqs_7); 
-    assign r = (y_px > 80 && y_px < 90 && x_px < freqs_8); 
-    assign r = (y_px > 90 && y_px < 100 && x_px < freqs_9); 
-    assign r = (y_px > 100 && y_px < 110 && x_px < freqs_10); 
-    assign r = (y_px > 110 && y_px < 120 && x_px < freqs_11); 
-    assign r = (y_px > 120 && y_px < 130 && x_px < freqs_12); 
-    assign r = (y_px > 130 && y_px < 140 && x_px < freqs_13); 
-    assign r = (y_px > 140 && y_px < 150 && x_px < freqs_14); 
-    assign r = (y_px > 150 && y_px < 160 && x_px < freqs_15); 
-                
+    assign r = (y_px > 0  && y_px < 10 && x_px < freqs_0) |
+        (y_px > 0  && y_px < 10 && x_px < freqs_1)  | 
+        (y_px > 10  && y_px < 20 && x_px < freqs_2) |
+        (y_px > 20  && y_px < 30 && x_px < freqs_3) 
+    ;
 
 
 endmodule

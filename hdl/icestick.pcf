@@ -2,10 +2,10 @@ set_io --warn-no-port LED 95 # centre green
 set_io --warn-no-port clk 21
 
 
-set_io --warn-no-port samp[0] 44
-set_io --warn-no-port samp[1] 45
-set_io --warn-no-port samp[2] 47
-set_io --warn-no-port samp[3] 48
+set_io --warn-no-port adc[0] 44
+set_io --warn-no-port adc[1] 45
+set_io --warn-no-port adc[2] 47
+set_io --warn-no-port adc[3] 48
 
 
 set_io --warn-no-port r 78
