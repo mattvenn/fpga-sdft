@@ -58,6 +58,7 @@ show-%: $(SRC_DIR)/%.v
 clean:
 	#rm -f $(BUILD_DIR)/*
 
-.SECONDARY: // needed or make will remove useful intermediate files
+#secondary needed or make will remove useful intermediate files
+.SECONDARY:
 .PHONY: all prog clean 
 

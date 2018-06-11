@@ -16,7 +16,7 @@ def fetch_data(name):
             data = (vcd[key]['tv'])
             ints = []
             for d in data:
-                ints.append(twos_comp(int(d[1],2), 16))
+                ints.append(twos_comp(int(d[1],2), 17))
             return ints
     
 
@@ -46,40 +46,37 @@ for i in range(N):
 
 print("recovered %d sets of freq history" % hist_len)
 
-plot = True
-if plot:
+plot_last = True
+plot_all = False
+if plot_all or plot_last:
     import matplotlib.pyplot as plt
     fig = plt.figure()
 
-color = 0.0
-MAX_HIST = 20
-jumps = hist_len / MAX_HIST
-plot_num = 1
-# show the last MAX_HIST freq plots
-for h in range(0, MAX_HIST * jumps, jumps):
-    print(h, plot_num)
+
+if plot_all:
+    color = 0.0
+    MAX_HIST = 20
+    jumps = hist_len / MAX_HIST
+    plot_num = 1
+    # show the last MAX_HIST freq plots
+    for h in range(0, MAX_HIST * jumps, jumps):
+        print(h, plot_num)
+        points = []
+        for n in range(N):
+            points.append(abs(complex(reals[n][h], imags[n][h])))
+        print(points)
+        if plot:
+            ax = fig.add_subplot(MAX_HIST+1,1,plot_num)
+        #    ax.set_ylim([0,500])
+            ax.plot(range(N), points)
+        plot_num += 1
+
+if plot_last:
     points = []
     for n in range(N):
-        points.append(abs(complex(reals[n][h], imags[n][h])))
-    print(points)
-    if plot:
-        ax = fig.add_subplot(MAX_HIST+1,1,plot_num)
-        ax.set_ylim([0,500])
-        ax.plot(range(N), points)
-    plot_num += 1
+        points.append(abs(complex(reals[n][hist_len-1], imags[n][hist_len-1])))
+    plt.plot(range(N), points)
 
-"""
-    print("%2d: " % i, end='')
-    count = 0
-    for real, imag in zip(reals, imags):
-        if count > len(reals) - 20:
-            print("%6.1f " % abs(complex(real,imag)), end='')
-            modulos.append(abs(complex(real,imag)))
-        count +=1
-#    ax.plot(range(N), , color)
-    print()
-"""
-
-if plot:
-    ax.legend()
+if plot_all or plot_last:
+    #ax.legend()
     plt.show()

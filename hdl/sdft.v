@@ -39,9 +39,9 @@ module sdft
     complex_mult #(.data_in_w(data_width+1), .data_out_w(data_width*2)) complex_mult_0(.a_real(complex_mult_in_a_real), .a_imag(complex_mult_in_a_imag), .b_real(twid_real), .b_imag(twid_imag), .out_real(complex_mult_out_real), .out_imag(complex_mult_out_imag));
 
 */
-    // frequency bins RAM - double width to handle multiply
-    reg signed [data_width*2-1:0] frequency_bins_real [freq_bins-1:0];
-    reg signed [data_width*2-1:0] frequency_bins_imag [freq_bins-1:0];
+    // frequency bins RAM - double width + 1 to handle multiply
+    reg signed [data_width*2:0] frequency_bins_real [freq_bins-1:0];
+    reg signed [data_width*2:0] frequency_bins_imag [freq_bins-1:0];
 
     // sample storage
     reg signed [data_width-1:0] samples [freq_bins-1:0];
