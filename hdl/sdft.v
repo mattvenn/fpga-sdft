@@ -2,7 +2,7 @@
 module sdft
 #(
     parameter data_width = 8, 
-    parameter freq_bins = 16,
+    parameter freq_bins = 8,
     parameter FILE_REAL = "hdl/twiddle_real.list",
     parameter FILE_IMAJ = "hdl/twiddle_imag.list"
 )
@@ -17,6 +17,7 @@ module sdft
     output wire [15:0]                      freqs_5,
     output wire [15:0]                      freqs_6,
     output wire [15:0]                      freqs_7,
+    /*
     output wire [15:0]                      freqs_8,
     output wire [15:0]                      freqs_9,
     output wire [15:0]                      freqs_10,
@@ -25,6 +26,7 @@ module sdft
     output wire [15:0]                      freqs_13,
     output wire [15:0]                      freqs_14,
     output wire [15:0]                      freqs_15
+    */
 );
 
 
@@ -46,22 +48,42 @@ module sdft
     reg signed [data_width*2-1:0] frequency_bins_imag [freq_bins-1:0];
 
     // this assignment has to happen after RAM declaration
-    assign freqs_0 = frequency_bins_imag[0] + 128;
-    assign freqs_1 = frequency_bins_imag[1] + 128;
-    assign freqs_2 = frequency_bins_imag[2] + 128;
-    assign freqs_3 = frequency_bins_imag[3] + 128;
-    assign freqs_4 = frequency_bins_imag[4] + 128;
-    assign freqs_5 = frequency_bins_imag[5] + 128;
-    assign freqs_6 = frequency_bins_imag[6] + 128;
-    assign freqs_7 = frequency_bins_imag[7] + 128;
-    assign freqs_8 = frequency_bins_imag[8] + 128;
-    assign freqs_9 = frequency_bins_imag[9] + 128;
-    assign freqs_10 = frequency_bins_imag[10] + 128;
-    assign freqs_11 = frequency_bins_imag[11] + 128;
-    assign freqs_12 = frequency_bins_imag[12] + 128;
-    assign freqs_13 = frequency_bins_imag[13] + 128;
-    assign freqs_14 = frequency_bins_imag[14] + 128;
-    assign freqs_15 = frequency_bins_imag[15] + 128;
+    /*
+    assign freqs_0 = ( frequency_bins_imag[0] * frequency_bins_imag[0] + frequency_bins_real[0] * frequency_bins_real[0]) >> 8;
+    assign freqs_1 = ( frequency_bins_imag[1] * frequency_bins_imag[1] + frequency_bins_real[1] * frequency_bins_real[1]) >> 8;
+    assign freqs_2 = ( frequency_bins_imag[2] * frequency_bins_imag[2] + frequency_bins_real[2] * frequency_bins_real[2]) >> 8;
+    assign freqs_3 = ( frequency_bins_imag[3] * frequency_bins_imag[3] + frequency_bins_real[3] * frequency_bins_real[3]) >> 8;
+    assign freqs_4 = ( frequency_bins_imag[4] * frequency_bins_imag[4] + frequency_bins_real[4] * frequency_bins_real[4]) >> 8;
+    assign freqs_5 = ( frequency_bins_imag[5] * frequency_bins_imag[5] + frequency_bins_real[5] * frequency_bins_real[5]) >> 8;
+    assign freqs_6 = ( frequency_bins_imag[6] * frequency_bins_imag[6] + frequency_bins_real[6] * frequency_bins_real[6]) >> 8;
+    assign freqs_7 = ( frequency_bins_imag[7] * frequency_bins_imag[7] + frequency_bins_real[7] * frequency_bins_real[7]) >> 8;
+    assign freqs_8 = ( frequency_bins_imag[8] * frequency_bins_imag[8] + frequency_bins_real[8] * frequency_bins_real[8]) >> 8;
+    assign freqs_9 = ( frequency_bins_imag[9] * frequency_bins_imag[9] + frequency_bins_real[9] * frequency_bins_real[9]) >> 8;
+    assign freqs_10 = ( frequency_bins_imag[10] * frequency_bins_imag[10] + frequency_bins_real[10] * frequency_bins_real[10]) >> 8;
+    assign freqs_11 = ( frequency_bins_imag[11] * frequency_bins_imag[11] + frequency_bins_real[11] * frequency_bins_real[11]) >> 8;
+    assign freqs_12 = ( frequency_bins_imag[12] * frequency_bins_imag[12] + frequency_bins_real[12] * frequency_bins_real[12]) >> 8;
+    assign freqs_13 = ( frequency_bins_imag[13] * frequency_bins_imag[13] + frequency_bins_real[13] * frequency_bins_real[13]) >> 8;
+    assign freqs_14 = ( frequency_bins_imag[14] * frequency_bins_imag[14] + frequency_bins_real[14] * frequency_bins_real[14]) >> 8;
+    assign freqs_15 = ( frequency_bins_imag[15] * frequency_bins_imag[15] + frequency_bins_real[15] * frequency_bins_real[15]) >> 8;
+    */
+    assign freqs_0 = ( frequency_bins_imag[0] + frequency_bins_real[0]) >> 8;
+    assign freqs_1 = ( frequency_bins_imag[1] + frequency_bins_real[1]) >> 8;
+    assign freqs_2 = ( frequency_bins_imag[2] + frequency_bins_real[2]) >> 8;
+    assign freqs_3 = ( frequency_bins_imag[3] + frequency_bins_real[3]) >> 8;
+    assign freqs_4 = ( frequency_bins_imag[4] + frequency_bins_real[4]) >> 8;
+    assign freqs_5 = ( frequency_bins_imag[5] + frequency_bins_real[5]) >> 8;
+    assign freqs_6 = ( frequency_bins_imag[6] + frequency_bins_real[6]) >> 8;
+    assign freqs_7 = ( frequency_bins_imag[7] + frequency_bins_real[7]) >> 8;
+    /*
+    assign freqs_8 = ( frequency_bins_imag[8] + frequency_bins_real[8]) >> 8;
+    assign freqs_9 = ( frequency_bins_imag[9] + frequency_bins_real[9]) >> 8;
+    assign freqs_10 = ( frequency_bins_imag[10] + frequency_bins_real[10]) >> 8;
+    assign freqs_11 = ( frequency_bins_imag[11] + frequency_bins_real[11]) >> 8;
+    assign freqs_12 = ( frequency_bins_imag[12] + frequency_bins_real[12]) >> 8;
+    assign freqs_13 = ( frequency_bins_imag[13] + frequency_bins_real[13]) >> 8;
+    assign freqs_14 = ( frequency_bins_imag[14] + frequency_bins_real[14]) >> 8;
+    assign freqs_15 = ( frequency_bins_imag[15] + frequency_bins_real[15]) >> 8;
+    */
 
     initial begin
         $readmemh(FILE_REAL, twiddle_rom_real);
