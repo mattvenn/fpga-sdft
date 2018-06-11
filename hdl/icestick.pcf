@@ -8,18 +8,18 @@ set_io --warn-no-port hsync 119
 set_io --warn-no-port vsync 118
 set_io --warn-no-port r 117
 set_io --warn-no-port g 116
-set_io --warn-no-port b 115
+set_io --warn-no-port b 45
 
 
 
-set_io --warn-no-port adc[7] 78
-set_io --warn-no-port adc[6] 87
-set_io --warn-no-port adc[5] 79
-set_io --warn-no-port adc[4] 88
-set_io --warn-no-port adc[3] 80
-set_io --warn-no-port adc[2] 90
-set_io --warn-no-port adc[1] 81
-set_io --warn-no-port adc[0] 91
+set_io --warn-no-port adc[6] 78
+set_io --warn-no-port adc[7] 87
+set_io --warn-no-port adc[4] 79
+set_io --warn-no-port adc[5] 88
+set_io --warn-no-port adc[2] 80
+set_io --warn-no-port adc[3] 90
+set_io --warn-no-port adc[0] 81
+set_io --warn-no-port adc[1] 91
 
 set_io --warn-no-port adc_clk 44
 
