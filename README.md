@@ -29,9 +29,11 @@ This is a sliding discrete Fourier transform. It requires two real adds and one 
 * How to do scaling - the twiddle factors are scaled to fill the hole register so things overflow quickly - trying the multiplication then immediate >>> 7 to scale as if the coeffs were -1->1 not -127->127
 
 
+
 # Todo
 
 * ADC board only works between 0 and 1v, even with external PSU. Without PSU low voltages don't register. Also, doesn't need the shutdown pin connected, just clock and data
+* ADC board pins are reversed. ADC board vref is 1.25 so max input is 1.25v.
 
 # Resources
 
