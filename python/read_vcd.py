@@ -28,7 +28,20 @@ for i in range(N):
     reals.append(fetch_data(real_name))
     imags.append(fetch_data(imag_name))
 
-hist_len = len(reals[0])
+# find longest set (these are VCD, so some may only have a limited number of entries
+hist_len = 0
+for i in range(N):
+    if len(reals[i]) > hist_len:
+        hist_len = len(reals[i])
+    if len(imags[i]) > hist_len:
+        hist_len = len(imags[i])
+
+# pad with last value if necessary 
+for i in range(N):
+    for p in range(hist_len-len(reals[i])):
+        reals[i].append(reals[i][len(reals[i])-1])
+    for p in range(hist_len-len(imags[i])):
+        imags[i].append(reals[i][len(imags[i])-1])
 
 
 print("recovered %d sets of freq history" % hist_len)
@@ -51,7 +64,7 @@ for h in range(0, MAX_HIST * jumps, jumps):
     print(points)
     if plot:
         ax = fig.add_subplot(MAX_HIST+1,1,plot_num)
-#        ax.set_ylim([0,50])
+        ax.set_ylim([0,500])
         ax.plot(range(N), points)
     plot_num += 1
 

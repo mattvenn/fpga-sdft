@@ -1,0 +1,35 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Mon Jun 11 15:18:02 2018
+[*]
+[dumpfile] "/home/matt/work/fpga/fft/build/complex_mult.vcd"
+[dumpfile_mtime] "Mon Jun 11 15:17:11 2018"
+[dumpfile_size] 1081
+[savefile] "/home/matt/work/fpga/fft/tests/gtk-complex_mult.gtkw"
+[timestart] 0
+[size] 1922 991
+[pos] -1 -1
+*-1.927323 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[sst_width] 253
+[signals_width] 184
+[sst_expanded] 1
+[sst_vpaned_height] 296
+@28
+test.clk
+@200
+-
+@420
+test.a_real[7:0]
+test.a_imag[7:0]
+@200
+-
+@420
+test.b_real[7:0]
+test.b_imag[7:0]
+@200
+-
+@421
+test.out_imag[15:0]
+test.out_real[15:0]
+[pattern_trace] 1
+[pattern_trace] 0

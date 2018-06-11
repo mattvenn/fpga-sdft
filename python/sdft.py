@@ -5,7 +5,7 @@ from scipy import signal
 import numpy as np
 
 # sample history needs to be the same as the number of frequency bins
-N = 100
+N = 16
 samp_hist = N
 
 coeffs = []
@@ -30,7 +30,7 @@ def sdft(delta):
 # initialise
 init_coeffs()
 t = np.linspace(0, 1, samp_hist, endpoint=False)
-sig_in = signal.square(40 * pi * 2 * t)
+sig_in = signal.square(pi * 2 * t)
 #sig_in = np.sin(pi * 2 * t)
 
 for i in range(N):

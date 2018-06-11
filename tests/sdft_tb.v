@@ -2,12 +2,11 @@
 module test;
 
     reg reset = 0;
-    reg signed [15:0] sample = 0;
+    reg signed [7:0] sample = 0;
+    reg start = 0;
+    wire ready;
 
-    wire [15:0]freqs_0 ;
-    wire [15:0]freqs_1;
-
-    integer i;
+    integer i, j;
     initial begin
         $dumpfile("test.vcd");
         $dumpvars(0,test);
@@ -15,8 +14,6 @@ module test;
             $dumpvars(1, dut.samples[i]);
             $dumpvars(2, dut.frequency_bins_real[i]);
             $dumpvars(3, dut.frequency_bins_imag[i]);
-            $dumpvars(4, dut.twiddle_rom_real[i]);
-            $dumpvars(5, dut.twiddle_rom_imag[i]);
         end
         /*
         for (i = 0; i < 100; i = i + 1) begin
@@ -36,11 +33,23 @@ module test;
             # 2;
         end
         */
-        for (i = 0; i < 20; i = i + 1) begin
-            sample <= -10;
-            # 2;
-            sample <= +10;
-            # 2;
+        for (i = 0; i < 2; i = i + 1) begin
+            for (j = 0; j < 8; j = j + 1) begin
+                $display("cycle: %d %d", j, sample);
+                sample <= -100;
+                start <= 1;
+                wait(ready == 0);
+                start <= 0;
+                wait(ready == 1);
+            end
+            for (j = 0; j < 8; j = j + 1) begin
+                $display("cycle: %d %d", j, sample);
+                sample <= +100;
+                start <= 1;
+                wait(ready == 0);
+                start <= 0;
+                wait(ready == 1);
+            end
         end
         $finish;
     end
@@ -49,6 +58,7 @@ module test;
     reg clk = 0;
     always #1 clk = !clk;
 
-    sdft #( .data_width(8), .freq_bins(16)) dut(.clk (clk), .sample(sample), .freqs_0(freqs_0), .freqs_1(freqs_1));
+    sdft #( .data_width(8), .freq_bins(16)) dut(.clk (clk), .sample(sample), .start(start), .ready(ready));
+       
 
 endmodule // test

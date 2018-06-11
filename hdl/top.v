@@ -30,15 +30,9 @@ module top (
     wire [15:0] freqs_2;
     wire [15:0] freqs_3;
 
-    sdft #( .data_width(8), .freq_bins(16)) sdft_0(.clk (adc_clk), .sample(sample),
-        .freqs_0(freqs_0),
-        .freqs_1(freqs_1),
-        .freqs_2(freqs_2),
-        .freqs_3(freqs_3),
-        
-        ); 
+    sdft #( .data_width(8), .freq_bins(16)) sdft_0(.clk (adc_clk), .sample(sample)); 
 
-    VgaSyncGen vga_inst( .clk(clk), .hsync(hsync), .vsync(vsync), .x_px(x_px), .y_px(y_px), .px_clk(px_clk), .activevideo(activevideo));
+//    VgaSyncGen vga_inst( .clk(clk), .hsync(hsync), .vsync(vsync), .x_px(x_px), .y_px(y_px), .px_clk(px_clk), .activevideo(activevideo));
 
     assign g = r;
     assign b = r;

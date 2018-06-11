@@ -8,7 +8,7 @@ PIN_DEF = $(SRC_DIR)/icestick.pcf
 SHELL := /bin/bash # Use bash syntax
 ICESTORM_DIR = ~/.apio/packages/toolchain-icestorm/bin/
 
-MODULES = sdft.v VgaSyncGen.v twiddle_rom.v
+MODULES = sdft.v VgaSyncGen.v twiddle_rom.v complex_mult.v
 VERILOG = top.v $(MODULES)
 SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
 
@@ -36,7 +36,7 @@ $(BUILD_DIR)/%.rpt: $(BUILD_DIR)/%.asc
 	icetime -d $(DEVICE) -mtr $@ $<
 
 # rules for simple tests with one verilog module per test bench
-$(BUILD_DIR)/%.out: $(TEST_DIR)/%_tb.v $(SRC_DIR)/twiddle_rom.v $(SRC_DIR)/%.v
+$(BUILD_DIR)/%.out: $(TEST_DIR)/%_tb.v $(SRC)
 	iverilog -o $(basename $@).out $^
 
 $(BUILD_DIR)/%.vcd: $(BUILD_DIR)/%.out 
@@ -52,17 +52,11 @@ $(BUILD_DIR)/twiddle_imag.list: python/gen_twiddle.py
 debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw
 	gtkwave $^
 
-debug-complex:
-	iverilog -o $(BUILD_DIR)/test $(TEST_DIR)/complex_tb.v
-	vvp $(BUILD_DIR)/test -fst
-	mv test.vcd $(BUILD_DIR)/
-	gtkwave $(BUILD_DIR)/test.vcd $(TEST_DIR)/gtk-complex.gtkw
-
 show-%: $(SRC_DIR)/%.v
 	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed"
 
-#clean:
-#	rm -f $(BUILD_DIR)/*
+clean:
+	#rm -f $(BUILD_DIR)/*
 
 .SECONDARY: // needed or make will remove useful intermediate files
 .PHONY: all prog clean 

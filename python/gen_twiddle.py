@@ -18,10 +18,17 @@ def hex2(n):
 def hex3(n):
     return "0x%s"%("0000%x"%(n&0xffff))[-4:]
 
-for i in range(int(N)):
-    cos_v = (max_val / 2 * math.cos(2 * math.pi * i / N))
-    sin_v = (max_val / 2 * math.sin(2 * math.pi * i / N))
-    print("%7.2f %7.2f -> %s %s" % (cos_v, sin_v, hex3(int(cos_v)), hex3(int(sin_v))))
-    real_fh.write(hex3(int(cos_v)) + "\n")
-    imag_fh.write(hex3(int(sin_v)) + "\n")
+def gen_twiddle():
+    coeffs = []
+    for i in range(int(N)):
+        cos_v = (max_val / 2 * math.cos(2 * math.pi * i / N))
+        sin_v = (max_val / 2 * math.sin(2 * math.pi * i / N))
+        coeffs.append(complex(cos_v, sin_v))
+        print("%7.2f %7.2f -> %s %s" % (cos_v, sin_v, hex3(int(cos_v)), hex3(int(sin_v))))
+        real_fh.write(hex3(int(cos_v)) + "\n")
+        imag_fh.write(hex3(int(sin_v)) + "\n")
+    return coeffs
+
+if __name__ == '__main__':
+    gen_twiddle()
 
