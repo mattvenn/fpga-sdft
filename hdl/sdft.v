@@ -10,6 +10,7 @@ module sdft
     input wire                              clk,
     input wire signed [data_width-1:0]      sample,
     output wire                             ready,
+    output reg signed [22:0]               accum_freq,
     input wire                              start
 );
 
@@ -39,9 +40,9 @@ module sdft
     complex_mult #(.data_in_w(data_width+1), .data_out_w(data_width*2)) complex_mult_0(.a_real(complex_mult_in_a_real), .a_imag(complex_mult_in_a_imag), .b_real(twid_real), .b_imag(twid_imag), .out_real(complex_mult_out_real), .out_imag(complex_mult_out_imag));
 
 */
-    // frequency bins RAM - double width + 1 to handle multiply
-    reg signed [data_width*2:0] frequency_bins_real [freq_bins-1:0];
-    reg signed [data_width*2:0] frequency_bins_imag [freq_bins-1:0];
+    // frequency bins RAM - double width + 2 to handle multiply
+    reg signed [data_width*2+3:0] frequency_bins_real [freq_bins-1:0];
+    reg signed [data_width*2+3:0] frequency_bins_imag [freq_bins-1:0];
 
     // sample storage
     reg signed [data_width-1:0] samples [freq_bins-1:0];
@@ -60,6 +61,9 @@ module sdft
             frequency_bins_imag[j] = 0;
         end
     end
+
+    reg signed [22:0] accum_freq = 0;
+
 
     localparam STATE_WAIT           = 0;
     localparam STATE_START          = 1;
@@ -89,6 +93,9 @@ module sdft
                 samples[sample_index] <= sample;
                 tw_addr <= 0;
                 state <= STATE_CALC;
+    for(j = 0; j < freq_bins; j = j + 1)  begin
+        accum_freq <= accum_freq +  (frequency_bins_real[j] * frequency_bins_real[j]) + (frequency_bins_imag[j] * frequency_bins_imag[j]);
+    end
             end
 
             STATE_LOAD_ROM: begin // 2
@@ -103,12 +110,6 @@ module sdft
                 state <= STATE_CALC;
             end
             STATE_CALC: begin // 4
-                //freqs[i] =  (freqs[i] + delta) * coeffs[i]
-//                frequency_bins_real[tw_addr] <= complex_mult_out_real >>> 7;
-//                frequency_bins_imag[tw_addr] <= complex_mult_out_imag >>> 7;
-//                frequency_bins_real[tw_addr] <= ((frequency_bins_real[tw_addr] + delta) * twid_real + (frequency_bins_imag[tw_addr] * twid_imag)) >>> 7;
- //               frequency_bins_imag[tw_addr] <= ((frequency_bins_imag[tw_addr]) * twid_imag + (frequency_bins_imag[tw_addr] * twid_real)) >>> 7;
-              // delta is only real, so can skip adding it to the imag parts
                 frequency_bins_real[tw_addr] <= ((frequency_bins_real[tw_addr] + delta) * twid_real - (frequency_bins_imag[tw_addr] * twid_imag)) >>> 7;
                 frequency_bins_imag[tw_addr] <= ((frequency_bins_real[tw_addr] + delta) * twid_imag + (frequency_bins_imag[tw_addr] * twid_real)) >>> 7;
 

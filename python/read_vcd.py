@@ -1,7 +1,7 @@
 from __future__ import print_function
 from Verilog_VCD import parse_vcd
 import struct
-N = 16
+N = 128
 vcd = parse_vcd('../build/sdft.vcd')
 def twos_comp(val, bits):
     """compute the 2's complement of int value val"""
@@ -16,7 +16,7 @@ def fetch_data(name):
             data = (vcd[key]['tv'])
             ints = []
             for d in data:
-                ints.append(twos_comp(int(d[1],2), 17))
+                ints.append(twos_comp(int(d[1],2), 20))
             return ints
     
 

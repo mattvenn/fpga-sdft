@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import math
-N = 16
+N = 128
 width = 8
 max_val = 2 ** width - 1
 real_fh = open("twiddle_real.list", 'w')
