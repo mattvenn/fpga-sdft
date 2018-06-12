@@ -1,0 +1,56 @@
+[*]
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Tue Jun 12 14:39:02 2018
+[*]
+[dumpfile] "/home/matt/work/fpga/fft/build/top.vcd"
+[dumpfile_mtime] "Tue Jun 12 14:36:47 2018"
+[dumpfile_size] 3664574
+[savefile] "/home/matt/work/fpga/fft/tests/gtk-top.gtkw"
+[timestart] 130035
+[size] 2512 1573
+[pos] -489 27
+*-4.993412 130166 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] test.
+[treeopen] test.top_0.
+[sst_width] 253
+[signals_width] 323
+[sst_expanded] 1
+[sst_vpaned_height] 497
+@28
+test.top_0.clk
+test.top_0.px_clk
+test.top_0.activevideo
+test.top_0.hsync
+@24
+test.top_0.x_px[9:0]
+test.top_0.y_px[9:0]
+@28
+test.top_0.vga_b
+@29
+test.top_0.draw_bar
+@200
+-
+@24
+test.top_0.freq_bram_r
+@22
+test.top_0.freq_bram_out[15:0]
+@24
+test.top_0.freq_bram_r_addr[4:0]
+test.top_0.freq_bram_r_clk
+@200
+-
+@24
+test.top_0.freq_bram_0.r_en
+test.top_0.freq_bram_0.r_clk
+@200
+-
+@28
+test.top_0.fft_read
+test.top_0.fft_ready
+test.top_0.fft_start
+@22
+test.top_0.freq_bram_0.\ram[0][15:0]
+test.top_0.freq_bram_0.\ram[1][15:0]
+test.top_0.freq_bram_0.\ram[2][15:0]
+[pattern_trace] 1
+[pattern_trace] 0
