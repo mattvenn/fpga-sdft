@@ -1,19 +1,20 @@
 [*]
 [*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
-[*] Tue Jun 12 14:39:02 2018
+[*] Tue Jun 12 16:46:02 2018
 [*]
 [dumpfile] "/home/matt/work/fpga/fft/build/top.vcd"
-[dumpfile_mtime] "Tue Jun 12 14:36:47 2018"
-[dumpfile_size] 3664574
+[dumpfile_mtime] "Tue Jun 12 16:44:39 2018"
+[dumpfile_size] 6671065
 [savefile] "/home/matt/work/fpga/fft/tests/gtk-top.gtkw"
-[timestart] 130035
+[timestart] 0
 [size] 2512 1573
-[pos] -489 27
-*-4.993412 130166 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] 48 27
+*-14.993412 108900 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.top_0.
+[treeopen] test.top_0.sdft_0.
 [sst_width] 253
-[signals_width] 323
+[signals_width] 536
 [sst_expanded] 1
 [sst_vpaned_height] 497
 @28
@@ -26,17 +27,29 @@ test.top_0.x_px[9:0]
 test.top_0.y_px[9:0]
 @28
 test.top_0.vga_b
-@29
 test.top_0.draw_bar
+test.top_0.start_of_line
+test.top_0.start_of_screen
 @200
 -
+@28
+test.top_0.freq_bram_w
 @24
 test.top_0.freq_bram_r
 @22
+test.top_0.freq_bram_in[15:0]
 test.top_0.freq_bram_out[15:0]
 @24
 test.top_0.freq_bram_r_addr[4:0]
+@22
+test.top_0.freq_bram_w_addr[4:0]
+@24
 test.top_0.freq_bram_r_clk
+@200
+-
+@420
+test.top_0.bin_out_imag[15:0]
+test.top_0.bin_out_real[15:0]
 @200
 -
 @24
@@ -44,6 +57,10 @@ test.top_0.freq_bram_0.r_en
 test.top_0.freq_bram_0.r_clk
 @200
 -
+@420
+test.top_0.sample[7:0]
+@22
+test.top_0.state[3:0]
 @28
 test.top_0.fft_read
 test.top_0.fft_ready
@@ -52,5 +69,25 @@ test.top_0.fft_start
 test.top_0.freq_bram_0.\ram[0][15:0]
 test.top_0.freq_bram_0.\ram[1][15:0]
 test.top_0.freq_bram_0.\ram[2][15:0]
+test.top_0.freq_bram_0.\ram[3][15:0]
+test.top_0.freq_bram_0.\ram[4][15:0]
+test.top_0.freq_bram_0.\ram[5][15:0]
+@200
+-
+@22
+test.top_0.sdft_0.state[3:0]
+@28
+test.top_0.sdft_0.start
+test.top_0.sdft_0.ready
+@24
+test.top_0.sdft_0.tw_addr[4:0]
+@420
+test.top_0.sdft_0.\frequency_bins_imag[0][19:0]
+test.top_0.sdft_0.\frequency_bins_real[0][19:0]
+@22
+test.top_0.sdft_0.bin_addr[3:0]
+@421
+test.top_0.sdft_0.bin_out_imag[19:0]
+test.top_0.sdft_0.bin_out_real[19:0]
 [pattern_trace] 1
 [pattern_trace] 0

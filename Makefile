@@ -14,7 +14,7 @@ MODULES = sdft.v VgaSyncGen.v twiddle_rom.v  freq_bram.v # complex_mult.v
 VERILOG = top.v $(MODULES)
 SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
 
-all: $(BUILD_DIR)/twiddle_imag.list $(PROJ).bin $(PROJ).rpt 
+all: $(SRC_DIR)/twiddle_imag.list $(PROJ).bin $(PROJ).rpt 
 
 # $@ The file name of the target of the rule.rule
 # $< first pre requisite
@@ -48,7 +48,7 @@ $(BUILD_DIR)/%.vcd: $(BUILD_DIR)/%.out
 prog: $(PROJ).bin
 	iceprog $<
 
-$(BUILD_DIR)/twiddle_imag.list: python/gen_twiddle.py
+$(SRC_DIR)/twiddle_imag.list: python/gen_twiddle.py
 	cd hdl; ../python/gen_twiddle.py
 
 debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw

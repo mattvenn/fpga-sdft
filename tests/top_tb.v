@@ -9,6 +9,8 @@ module test;
     localparam num_tests = 2 ** addr_w;
     integer i;
 
+    reg signed [data_w-1:0] adc = 50;
+
     wire [data_w-1:0] d_out;
     reg [data_w-1:0] d_in = 0;
     reg w_en = 0;
@@ -22,9 +24,12 @@ module test;
         $dumpvars(0,test);
         for (i = 0 ; i < freq_bins ; i = i + 1) begin
             $dumpvars(1, top_0.freq_bram_0.ram[i]);
+            $dumpvars(2, top_0.sdft_0.frequency_bins_real[i]);
+            $dumpvars(3, top_0.sdft_0.frequency_bins_imag[i]);
         end
+
         wait(top_0.y_px == 1);
-        wait(top_0.y_px == 40);
+        wait(top_0.y_px == 400);
         # 200
         $finish;
     end
@@ -32,8 +37,9 @@ module test;
     // clock
     reg clk = 0;
     always #1 clk = !clk;
+    always #100 adc = !adc;
 
-    top top_0(.clk(clk));
+    top top_0(.clk(clk), .adc(adc));
 
 endmodule
 

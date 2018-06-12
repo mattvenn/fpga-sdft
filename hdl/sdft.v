@@ -13,11 +13,16 @@ module sdft
     input wire                              read,
     input wire [bin_addr_w-1:0]             bin_addr,
 
-    output reg signed [22:0]                bin_out_real,
-    output reg signed [22:0]                bin_out_imag,
+    output reg signed [data_width*2+3:0]                bin_out_real,
+    output reg signed [data_width*2+3:0]                bin_out_imag,
     output wire                             ready
 );
 
+
+    initial begin
+        bin_out_real <= 0;
+        bin_out_imag <= 0;
+    end
 
     // width of addr needed to address the frequency bins
     localparam bin_addr_w = $clog2(freq_bins);
@@ -76,12 +81,12 @@ module sdft
     localparam STATE_CALC           = 5;
     localparam STATE_FINISH         = 6;
 
-    reg [3:0] state = STATE_START;
+    reg [3:0] state = STATE_WAIT;
 /*
     assign complex_mult_in_a_real = frequency_bins_real[tw_addr] + delta;
     assign complex_mult_in_a_imag = frequency_bins_imag[tw_addr]; // imag component
 */
-    assign ready = state == STATE_WAIT ? 1'b1 : 1'b0;
+    assign ready = (state == STATE_WAIT) ? 1'b1 : 1'b0;
 
     always@(posedge clk) begin
         case(state)

@@ -13,15 +13,14 @@ module top (
 
 );
 
-    localparam freq_bins = 16;
+    localparam freq_bins = 64;
     localparam freq_data_w = 16;
     localparam bin_addr_w = $clog2(freq_bins);
-    reg [bin_addr_w:0] bin_addr;
     localparam screen_height = 480;
     localparam bar_height = screen_height / freq_bins;
     localparam bar_height_counter_w = $clog2(bar_height);
 
-    reg [10:0] update_counter = 0; // when this wraps we update the frequency bins
+    reg [6:0] update_counter = 0; // when this wraps we update the frequency bins
 
     integer i;
 
@@ -30,12 +29,13 @@ module top (
     wire signed [freq_data_w-1:0] bin_out_imag;
     wire signed [freq_data_w-1:0] bin_out_real;
     wire fft_ready;
-    reg fft_start;
-    reg fft_read;
+    wire fft_clk = px_clk;
+    reg fft_start = 0;
+    reg fft_read = 0;
 
     reg [7:0] sample;
 
-    //sdft #( .data_width(8), .freq_bins(freq_bins)) sdft_0(.clk (adc_clk), .sample(sample), .ready(fft_ready), .start(fft_start), .read(fft_read), .bin_out_real(bin_out_real), .bin_out_imag(bin_out_imag)); 
+    sdft #( .data_width(8), .freq_bins(freq_bins)) sdft_0(.clk (fft_clk), .sample(sample), .ready(fft_ready), .start(fft_start), .read(fft_read), .bin_out_real(bin_out_real), .bin_out_imag(bin_out_imag), .bin_addr(freq_bram_w_addr)); 
 
     wire px_clk;
     wire activevideo;
@@ -46,43 +46,82 @@ module top (
 
     VgaSyncGen vga_inst( .clk(clk), .hsync(hsync), .vsync(vsync), .x_px(x_px), .y_px(y_px), .px_clk(px_clk), .activevideo(activevideo));
 
-    wire [bin_addr_w:0] freq_bram_w_addr;
+    reg [bin_addr_w:0] freq_bram_w_addr = 0;
     wire [bin_addr_w:0] freq_bram_r_addr;
     wire [freq_data_w-1:0] freq_bram_out;
-    wire [freq_data_w-1:0] freq_bram_in;
-    reg freq_bram_w; // write enable signal
+    reg [freq_data_w-1:0] freq_bram_in = 0;
+    reg freq_bram_w = 0; // write enable signal
     wire freq_bram_r; // read enable signal
-    wire freq_bram_r_clk;
-    wire freq_bram_w_clk;
+    wire freq_bram_r_clk = px_clk;
+    wire freq_bram_w_clk = px_clk;
 
     freq_bram #(.addr_w(bin_addr_w), .data_w(freq_data_w)) freq_bram_0(.w_clk(freq_bram_w_clk), .r_clk(freq_bram_r_clk), .w_en(freq_bram_w), .r_en(freq_bram_r), .d_in(freq_bram_in), .d_out(freq_bram_out), .r_addr(freq_bram_r_addr), .w_addr(freq_bram_w_addr));
 
-/*
-    reg [3:0] state = STATE_START;
+    ///////////////////////////////////////////////////////////////
+    //
+    // run the fft
+
+    localparam STATE_WAIT_FFT   = 0;
+    localparam STATE_WAIT_START = 1;
+    localparam STATE_PROCESS    = 2;
+    localparam STATE_READ       = 3;
+    localparam STATE_WRITE_BRAM = 4;
+
+    reg [3:0] state = STATE_WAIT_FFT;
     // sample data as fast as possible
-    always @(posedge adc_clk) begin
-        update_counter <= update_counter + 1;
-        if(update_counter == 0 && fft_ready) begin
-            bin_addr <= bin_addr + 1;
-            fft_read <= 1;
-            if(bin_addr == freq_bins -1)
-                bin_addr <= 0;
+    always @(posedge fft_clk) begin
+        case(state)
+            STATE_WAIT_FFT: begin
+                if(fft_ready) begin
+                    sample <= adc;
+                    fft_start <= 1'b1;
+                    state <= STATE_WAIT_START;
+                end
+            end
 
-            // store the squared bin value to BRAM
-            freq_bram_in <= (bin_out_real * bin_out_real) + (bin_out_imag * bin_out_imag) >> 8; // some divider here
-            bram_w <= 1;
+            STATE_WAIT_START: begin
+                if(fft_ready == 0)
+                    state <= STATE_PROCESS;
+            end
 
-        elif(fft_ready) begin
-            sample <= adc;
-            fft_start <= 1'b1;
-        end
-        else begin
-            fft_start <= 1'b0;
-            fft_read <= 1'b0;
-        end
+            STATE_PROCESS: begin
+                fft_start <= 1'b0;
+                if(fft_ready) begin
+                    update_counter <= update_counter + 1;
+                    if(update_counter == 0 && fft_ready) begin // read the next bank of frequency data into the bram
+                        // increment the counter and wrap it
+                        freq_bram_w_addr <= freq_bram_w_addr + 1;
+                        if(freq_bram_w_addr == freq_bins -1)
+                            freq_bram_w_addr <= 0;
+                        // set the read flag
+                        fft_read <= 1'b1;
+                        state <= STATE_READ;
+                    end else
+                        state <= STATE_WAIT_FFT;
+                end
+            end
+
+            STATE_READ: begin
+                // store the squared bin value to BRAM
+                freq_bram_in <= (bin_out_real * bin_out_real) + (bin_out_imag * bin_out_imag) >> 8; // some divider here
+                fft_read <= 1'b0;
+                freq_bram_w <= 1'b1;
+                state <= STATE_WRITE_BRAM;
+            end
+
+            STATE_WRITE_BRAM: begin
+                freq_bram_w <= 1'b0;
+                state <= STATE_WAIT_FFT;
+            end
+
+        endcase
     end
-*/
     
+    ///////////////////////////////////////////////////////////////
+    //
+    // draw the bars
+
+
     // bram addr is calculated from y_px
     assign freq_bram_r_addr = y_px / bar_height;
     // request new value at top of bar and left side of screen
@@ -91,7 +130,6 @@ module top (
     assign freq_bram_r = bar_height_counter == 0 && start_of_line;
     // draw the bar if the x_px is below the frequency value
     assign draw_bar = x_px < freq_bram_out;
-    assign freq_bram_r_clk = px_clk;
     reg [bar_height_counter_w:0] bar_height_counter = 0;
 
     // increment bar_height_counter every new line, reset to 0 at top of the screen and after every bar

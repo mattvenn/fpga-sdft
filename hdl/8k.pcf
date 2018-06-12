@@ -23,6 +23,15 @@ set_io --warn-no-port vga_r M2
 set_io --warn-no-port vga_g L3
 set_io --warn-no-port vga_b K3
 
+### ADC
+set_io --warn-no-port adc[0] C16
+set_io --warn-no-port adc[1] D16
+set_io --warn-no-port adc[2] E16
+set_io --warn-no-port adc[3] B16
+set_io --warn-no-port adc[4] D14
+set_io --warn-no-port adc[5] D15
+set_io --warn-no-port adc[6] F16
+set_io --warn-no-port adc[7] E14
 
 ### UART (FTDI Channel B)
 #set_io RS232_RX_i B10

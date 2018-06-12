@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import math
-N = 16
+N = 64
 width = 8
 max_val = 2 ** width - 1
 
