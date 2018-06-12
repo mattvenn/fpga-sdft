@@ -56,7 +56,7 @@ show-%: $(SRC_DIR)/%.v
 	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed"
 
 clean:
-	#rm -f $(BUILD_DIR)/*
+	rm -f $(BUILD_DIR)/*
 
 #secondary needed or make will remove useful intermediate files
 .SECONDARY:

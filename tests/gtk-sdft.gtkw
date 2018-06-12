@@ -1,15 +1,15 @@
 [*]
-[*] GTKWave Analyzer v3.3.58 (w)1999-2014 BSI
-[*] Mon Jun 11 20:36:04 2018
+[*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
+[*] Tue Jun 12 07:54:37 2018
 [*]
-[dumpfile] "/home/mattvenn/work/fpga/fpga-fft/build/sdft.vcd"
-[dumpfile_mtime] "Mon Jun 11 20:33:22 2018"
-[dumpfile_size] 283346
-[savefile] "/home/mattvenn/work/fpga/fpga-fft/tests/gtk-sdft.gtkw"
-[timestart] 6435
-[size] 1440 876
-[pos] 380 417
-*-9.000000 7249 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[dumpfile] "/home/matt/work/fpga/fft/build/sdft.vcd"
+[dumpfile_mtime] "Tue Jun 12 07:53:10 2018"
+[dumpfile_size] 5920108
+[savefile] "/home/matt/work/fpga/fft/tests/gtk-sdft.gtkw"
+[timestart] 197580
+[size] 1515 876
+[pos] 712 807
+*-4.000000 197634 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.dut.
 [sst_width] 352
@@ -24,6 +24,7 @@ test.sample[7:0]
 @28
 test.start
 test.ready
+test.dut.read
 @200
 -
 @22
@@ -31,32 +32,27 @@ test.dut.state[3:0]
 @420
 test.dut.sample[7:0]
 test.dut.delta[8:0]
-@25
-test.dut.sample_index[4:0]
-test.dut.tw_addr[5:0]
 @200
 -
 @420
-test.dut.\frequency_bins_real[0][16:0]
-test.dut.\frequency_bins_imag[0][16:0]
-test.dut.\frequency_bins_real[1][16:0]
-test.dut.\frequency_bins_imag[1][16:0]
-test.dut.\frequency_bins_real[2][16:0]
-test.dut.\frequency_bins_imag[2][16:0]
+test.dut.\frequency_bins_imag[0][19:0]
+test.dut.\frequency_bins_real[0][19:0]
+test.dut.\frequency_bins_imag[1][19:0]
+test.dut.\frequency_bins_real[1][19:0]
 @200
 -
-@420
-test.dut.\frequency_bins_real[14][16:0]
-test.dut.\frequency_bins_imag[14][16:0]
-test.dut.\frequency_bins_real[15][16:0]
-test.dut.\frequency_bins_imag[15][16:0]
-@200
 -
 @420
 test.dut.twid_real[7:0]
 test.dut.twid_imag[7:0]
 @200
 -
+@22
+test.dut.bin_addr[6:0]
+@421
+test.dut.bin_out_imag[22:0]
+test.dut.bin_out_real[22:0]
+@200
 -
 -
 -

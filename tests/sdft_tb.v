@@ -4,9 +4,15 @@ module test;
     reg reset = 0;
     reg signed [7:0] sample = 0;
     reg start = 0;
+    reg read = 0;
+    reg [bin_addr_w-1:0] bin_addr = 0;
+
     wire ready;
+    wire [22:0] out_imag;
+    wire [22:0] out_real;
 
     localparam bins = 128;
+    localparam bin_addr_w = $clog2(bins);
 
     integer i, j;
     initial begin
@@ -36,6 +42,19 @@ module test;
                 wait(ready == 1);
             end
         end
+
+        // read some values
+        bin_addr <= 0;
+        read <= 1;
+        wait(ready == 0);
+        read <= 0;
+        # 4
+        bin_addr <= 1;
+        read <= 1;
+        wait(ready == 0);
+        read <= 0;
+        # 4
+
         $finish;
     end
 
@@ -43,7 +62,7 @@ module test;
     reg clk = 0;
     always #1 clk = !clk;
 
-    sdft #( .data_width(8), .freq_bins(bins)) dut(.clk (clk), .sample(sample), .start(start), .ready(ready));
+    sdft #( .data_width(8), .freq_bins(bins)) dut(.clk (clk), .sample(sample), .start(start), .ready(ready), .bin_addr(bin_addr), .read(read), .bin_out_imag(out_imag), .bin_out_real(out_real));
        
 
 endmodule // test

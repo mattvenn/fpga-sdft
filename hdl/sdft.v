@@ -9,9 +9,13 @@ module sdft
 (
     input wire                              clk,
     input wire signed [data_width-1:0]      sample,
-    output wire                             ready,
-    output reg signed [22:0]               accum_freq,
-    input wire                              start
+    input wire                              start,
+    input wire                              read,
+    input wire [bin_addr_w-1:0]             bin_addr,
+
+    output reg signed [22:0]                bin_out_real,
+    output reg signed [22:0]                bin_out_imag,
+    output wire                             ready
 );
 
 
@@ -29,7 +33,7 @@ module sdft
     wire signed [data_width-1:0] twid_imag;
     twiddle_rom #(.addr_w(bin_addr_w), .data_w(data_width)) twiddle_rom_0(.clk(clk), .addr(tw_addr), .dout_real(twid_real), .dout_imag(twid_imag));
 
-    // complex mult
+    // complex mult as a module
     /*
     wire signed [data_width*2-1:0] complex_mult_out_real;
     wire signed [data_width*2-1:0] complex_mult_out_imag;
@@ -62,15 +66,15 @@ module sdft
         end
     end
 
-    reg signed [22:0] accum_freq = 0;
 
 
     localparam STATE_WAIT           = 0;
     localparam STATE_START          = 1;
-    localparam STATE_LOAD_ROM       = 2;
-    localparam STATE_WAIT_ROM       = 3;
-    localparam STATE_CALC           = 4;
-    localparam STATE_FINISH         = 5;
+    localparam STATE_READ           = 2;
+    localparam STATE_LOAD_ROM       = 3;
+    localparam STATE_WAIT_ROM       = 4;
+    localparam STATE_CALC           = 5;
+    localparam STATE_FINISH         = 6;
 
     reg [3:0] state = STATE_START;
 /*
@@ -84,7 +88,16 @@ module sdft
             STATE_WAIT: begin
                 if(start)
                     state <= STATE_START;
+                if(read)
+                    state <= STATE_READ;
             end 
+
+            STATE_READ: begin
+                bin_out_real <= frequency_bins_real[bin_addr];
+                bin_out_imag <= frequency_bins_imag[bin_addr];
+                state <= STATE_WAIT;
+
+            end
 
             STATE_START: begin
                 // get delta: newest - oldest
@@ -93,9 +106,6 @@ module sdft
                 samples[sample_index] <= sample;
                 tw_addr <= 0;
                 state <= STATE_CALC;
-    for(j = 0; j < freq_bins; j = j + 1)  begin
-        accum_freq <= accum_freq +  (frequency_bins_real[j] * frequency_bins_real[j]) + (frequency_bins_imag[j] * frequency_bins_imag[j]);
-    end
             end
 
             STATE_LOAD_ROM: begin // 2
