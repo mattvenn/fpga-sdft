@@ -8,9 +8,9 @@ set_io --warn-no-port adc[2] 47
 set_io --warn-no-port adc[3] 48
 
 
-set_io --warn-no-port r 78
-set_io --warn-no-port g 79
-set_io --warn-no-port b 80
+set_io --warn-no-port vga_r 78
+set_io --warn-no-port vga_g 79
+set_io --warn-no-port vga_b 80
 set_io --warn-no-port hsync 87
 set_io --warn-no-port vsync 88
 

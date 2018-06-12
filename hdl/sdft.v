@@ -122,9 +122,6 @@ module sdft
             STATE_CALC: begin // 4
                 frequency_bins_real[tw_addr] <= ((frequency_bins_real[tw_addr] + delta) * twid_real - (frequency_bins_imag[tw_addr] * twid_imag)) >>> 7;
                 frequency_bins_imag[tw_addr] <= ((frequency_bins_real[tw_addr] + delta) * twid_imag + (frequency_bins_imag[tw_addr] * twid_real)) >>> 7;
-
-
-
                 state <= STATE_LOAD_ROM;
             end
 

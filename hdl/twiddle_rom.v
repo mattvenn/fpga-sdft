@@ -8,9 +8,9 @@ module twiddle_rom
 )
 (
     input wire                  clk,
-    input wire [addr_w-1:0] addr,
-    output reg [data_w-1:0] dout_real,
-    output reg [data_w-1:0] dout_imag
+    input wire [addr_w-1:0]     addr,
+    output reg [data_w-1:0]     dout_real,
+    output reg [data_w-1:0]     dout_imag
 );
 
     reg [data_w-1:0] rom_real [(1 << addr_w)-1:0];

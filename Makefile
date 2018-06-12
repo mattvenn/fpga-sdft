@@ -1,14 +1,16 @@
-DEVICE = hx1k
+PACKAGE = ct256
+DEVICE = hx8k
 SRC_DIR = hdl
 TEST_DIR = tests
 DOCS_DIR = docs
 BUILD_DIR = build
 PROJ = $(BUILD_DIR)/fft
-PIN_DEF = $(SRC_DIR)/icestick.pcf
+PIN_DEF = $(SRC_DIR)/8k.pcf
 SHELL := /bin/bash # Use bash syntax
 ICESTORM_DIR = ~/.apio/packages/toolchain-icestorm/bin/
+ICESTORM_DIR = /usr/bin/
 
-MODULES = sdft.v VgaSyncGen.v twiddle_rom.v complex_mult.v
+MODULES = sdft.v VgaSyncGen.v twiddle_rom.v  freq_bram.v # complex_mult.v
 VERILOG = top.v $(MODULES)
 SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
 
@@ -24,8 +26,8 @@ $(BUILD_DIR)/%.blif: $(SRC)
 
 # asc
 $(BUILD_DIR)/%.asc: $(PIN_DEF) $(BUILD_DIR)/%.blif
-	#arachne-pnr --device 8k --package tq144:4k -o $@ -p $^
-	arachne-pnr -d $(subst hx,,$(subst lp,,$(DEVICE))) -o $@ -p $^
+	arachne-pnr --device 8k --package $(PACKAGE) -p $^ -o $@
+	#arachne-pnr -d $(subst hx,,$(subst lp,,$(DEVICE))) -o $@ -p $^
 
 # bin, for programming
 $(BUILD_DIR)/%.bin: $(BUILD_DIR)/%.asc
