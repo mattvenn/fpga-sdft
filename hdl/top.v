@@ -36,7 +36,7 @@ module top (
     wire px_clk;
     wire activevideo;
     wire draw_bar;
-    assign vga_g = (activevideo && draw_bar) || (y_px < 5);
+    assign vga_g = activevideo && (draw_bar || x_px < 5);
     assign vga_r = activevideo && draw_bar; // not connected on the board at the mo
     assign vga_b = activevideo && draw_bar;
 
@@ -56,7 +56,6 @@ module top (
     ///////////////////////////////////////////////////////////////
     //
     // run the fft
-
     assign fft_read = (state == STATE_PROCESS) && fft_ready;
 
     reg [3:0] state = STATE_WAIT_FFT;
