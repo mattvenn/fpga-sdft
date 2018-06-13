@@ -1,47 +1,63 @@
 `default_nettype none
 module test;
 
+    `include "tests/localparams.vh"
+
     reg reset = 0;
-    reg signed [15:0] sample = 0;
+    reg signed [data_width-1:0] sample = 0;
+    reg start = 0;
+    reg read = 0;
+    reg [bin_addr_w-1:0] bin_addr = 0;
 
-    wire [15:0]freqs_0 ;
-    wire [15:0]freqs_1;
+    wire ready;
+    wire [freq_data_w-1:0] out_imag;
+    wire [freq_data_w-1:0] out_real;
 
-    integer i;
+    integer i, j;
     initial begin
         $dumpfile("test.vcd");
         $dumpvars(0,test);
-        for (i = 0 ; i < 16 ; i = i + 1) begin
+        for (i = 0 ; i < freq_bins ; i = i + 1) begin
             $dumpvars(1, dut.samples[i]);
             $dumpvars(2, dut.frequency_bins_real[i]);
             $dumpvars(3, dut.frequency_bins_imag[i]);
-            $dumpvars(4, dut.twiddle_rom_real[i]);
-            $dumpvars(5, dut.twiddle_rom_imag[i]);
         end
-        /*
-        for (i = 0; i < 100; i = i + 1) begin
-            sample <= 1;
-            # 2;
-            sample <= 2;
-            # 2;
-            sample <= 3;
-            # 2;
-            sample <= 4;
-            # 2;
-            sample <= 5;
-            # 2;
-            sample <= 6;
-            # 2;
-            sample <= 7;
-            # 2;
+
+        while(dut.cycles < 352) begin
+            for (i = 0; i < 2; i = i + 1) begin
+                for (j = 0; j < 3; j = j + 1) begin
+                    $display("cycle: %d %d", j, sample);
+                    wait(ready == 1);
+                    sample <= sample_low;
+                    start <= 1;
+                    wait(ready == 0);
+                    start <= 0;
+                end
+                for (j = 0; j < 3; j = j + 1) begin
+                    $display("cycle: %d %d", j, sample);
+                    wait(ready == 1);
+                    sample <= sample_high;
+                    start <= 1;
+                    wait(ready == 0);
+                    start <= 0;
+                end
+            end
         end
-        */
-        for (i = 0; i < 20; i = i + 1) begin
-            sample <= -10;
-            # 2;
-            sample <= +10;
-            # 2;
-        end
+
+        $display("fft cycles: %d", dut.cycles);
+
+        // read some values
+        bin_addr <= 0;
+        read <= 1;
+        wait(ready == 0);
+        read <= 0;
+        # 4
+        bin_addr <= 1;
+        read <= 1;
+        wait(ready == 0);
+        read <= 0;
+        # 4
+
         $finish;
     end
 
@@ -49,6 +65,7 @@ module test;
     reg clk = 0;
     always #1 clk = !clk;
 
-    sdft #( .data_width(8), .freq_bins(16)) dut(.clk (clk), .sample(sample), .freqs_0(freqs_0), .freqs_1(freqs_1));
+    sdft #( .data_width(data_width), .freq_bins(freq_bins), .freq_w(freq_data_w)) dut(.clk (clk), .sample(sample), .start(start), .ready(ready), .bin_addr(bin_addr), .read(read), .bin_out_imag(out_imag), .bin_out_real(out_real));
+       
 
 endmodule // test

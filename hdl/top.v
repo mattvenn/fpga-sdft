@@ -7,83 +7,133 @@ module top (
     output adc_clk,
     output hsync,
     output vsync,
-    output r,
-    output g,
-    output b
+    output vga_r,
+    output vga_g,
+    output vga_b
 
 );
 
+    `include "tests/localparams.vh"
+
+    reg [6:0] update_counter = 0; // when this wraps we update the frequency bins
+    reg [8:0] read_cycles = 0; // keep track of fft reads -> bram
+
+    integer i;
+
     wire [9:0] x_px;
     wire [9:0] y_px;
-    wire px_clk;
-    wire activevideo;
+    wire signed [freq_data_w-1:0] bin_out_imag;
+    wire signed [freq_data_w-1:0] bin_out_real;
+    wire fft_ready;
+    wire fft_clk = px_clk;
+    reg fft_start = 0;
+    wire fft_read; // = 0;
 
     reg [7:0] sample;
-    
-    // sample once per screen update
-    assign adc_clk = hsync;
-    always @(posedge adc_clk)
-        sample <= adc;
 
-    wire [15:0] freqs_0;
-    wire [15:0] freqs_1;
-    wire [15:0] freqs_2;
-    wire [15:0] freqs_3;
-    wire [15:0] freqs_4;
-    wire [15:0] freqs_5;
-    wire [15:0] freqs_6;
-    wire [15:0] freqs_7;
-    wire [15:0] freqs_8;
-    wire [15:0] freqs_9;
-    wire [15:0] freqs_10;
-    wire [15:0] freqs_11;
-    wire [15:0] freqs_12;
-    wire [15:0] freqs_13;
-    wire [15:0] freqs_14;
-    wire [15:0] freqs_15;
+    sdft #( .data_width(data_width), .freq_bins(freq_bins), .freq_w(freq_data_w)) sdft_0(.clk (fft_clk), .sample(sample), .ready(fft_ready), .start(fft_start), .read(fft_read), .bin_out_real(bin_out_real), .bin_out_imag(bin_out_imag), .bin_addr(freq_bram_w_addr)); 
 
-    sdft #( .data_width(8), .freq_bins(16)) sdft_0(.clk (adc_clk), .sample(sample), 
-        .freqs_0(freqs_0), 
-        .freqs_1(freqs_1),
-        .freqs_2(freqs_2),
-        .freqs_3(freqs_3),
-        .freqs_4(freqs_4),
-        .freqs_5(freqs_5),
-        .freqs_6(freqs_6),
-        .freqs_7(freqs_7),
-        .freqs_8(freqs_8),
-        .freqs_9(freqs_9),
-        .freqs_10(freqs_10),
-        .freqs_11(freqs_11),
-        .freqs_12(freqs_12),
-        .freqs_13(freqs_13),
-        .freqs_14(freqs_14),
-        .freqs_15(freqs_15)
-        
-        ); 
+    wire px_clk;
+    wire activevideo;
+    wire draw_bar;
+    assign vga_g = (activevideo && draw_bar) || (y_px < 5);
+    assign vga_r = activevideo && draw_bar; // not connected on the board at the mo
+    assign vga_b = activevideo && draw_bar;
 
     VgaSyncGen vga_inst( .clk(clk), .hsync(hsync), .vsync(vsync), .x_px(x_px), .y_px(y_px), .px_clk(px_clk), .activevideo(activevideo));
 
-    assign g = r;
-    assign b = r;
-   
-    assign r = activevideo && (y_px > 0  && y_px < 10 ) && (x_px < freqs_0); 
-    assign r = activevideo && (y_px > 10 && y_px < 20 ) && (x_px < freqs_1); 
-    assign r = activevideo && (y_px > 20 && y_px < 30 ) && (x_px < freqs_2); 
-    assign r = activevideo && (y_px > 30 && y_px < 40 ) && (x_px < freqs_3); 
-    assign r = activevideo && (y_px > 40 && y_px < 50 ) && (x_px < freqs_4); 
-    assign r = activevideo && (y_px > 50 && y_px < 60 ) && (x_px < freqs_5); 
-    assign r = activevideo && (y_px > 60 && y_px < 70 ) && (x_px < freqs_6); 
-    assign r = activevideo && (y_px > 70 && y_px < 80 ) && (x_px < freqs_7); 
-    assign r = activevideo && (y_px > 80 && y_px < 90 ) && (x_px < freqs_8); 
-    assign r = activevideo && (y_px > 90 && y_px < 100 ) && (x_px < freqs_9); 
-    assign r = activevideo && (y_px > 100 && y_px < 110 ) && (x_px < freqs_10); 
-    assign r = activevideo && (y_px > 110 && y_px < 120 ) && (x_px < freqs_11); 
-    assign r = activevideo && (y_px > 120 && y_px < 130 ) && (x_px < freqs_12); 
-    assign r = activevideo && (y_px > 130 && y_px < 140 ) && (x_px < freqs_13); 
-    assign r = activevideo && (y_px > 140 && y_px < 150 ) && (x_px < freqs_14); 
-    assign r = activevideo && (y_px > 150 && y_px < 160 ) && (x_px < freqs_15); 
-                
+    reg [bin_addr_w:0] freq_bram_w_addr = 0;
+    wire [bin_addr_w:0] freq_bram_r_addr;
+    wire [freq_data_w-1:0] freq_bram_out;
+    reg [freq_data_w-1:0] freq_bram_in = 0;
+    reg freq_bram_w = 0; // write enable signal
+    wire freq_bram_r; // read enable signal
+    wire freq_bram_r_clk = px_clk;
+    wire freq_bram_w_clk = px_clk;
 
+    freq_bram #(.addr_w(bin_addr_w), .data_w(freq_data_w)) freq_bram_0(.w_clk(freq_bram_w_clk), .r_clk(freq_bram_r_clk), .w_en(freq_bram_w), .r_en(freq_bram_r), .d_in(freq_bram_in), .d_out(freq_bram_out), .r_addr(freq_bram_r_addr), .w_addr(freq_bram_w_addr));
+
+    ///////////////////////////////////////////////////////////////
+    //
+    // run the fft
+
+    assign fft_read = (state == STATE_PROCESS) && fft_ready;
+
+    reg [3:0] state = STATE_WAIT_FFT;
+    // sample data as fast as possible
+    always @(posedge fft_clk) begin
+        case(state)
+            STATE_WAIT_FFT: begin
+                if(fft_ready) begin
+                    sample <= adc;
+                    fft_start <= 1'b1;
+                    state <= STATE_WAIT_START;
+                end
+            end
+
+            STATE_WAIT_START: begin
+                if(fft_ready == 0)
+                    state <= STATE_PROCESS;
+            end
+
+            STATE_PROCESS: begin
+                fft_start <= 1'b0;
+                if(fft_ready) begin
+                    update_counter <= update_counter + 1;
+                    if(update_counter == FFT_READ_CYCLES && fft_ready) begin // read the next bank of frequency data into the bram
+                        update_counter <= 0;
+                        // set the read flag
+                //        fft_read <= 1'b1;
+                        state <= STATE_READ;
+                    end else
+                        state <= STATE_WAIT_FFT;
+                end else
+                    state <= STATE_PROCESS;
+            end
+
+            STATE_READ: begin
+                // store the squared bin value to BRAM
+                read_cycles <= read_cycles + 1;
+                freq_bram_in <= ((bin_out_real * bin_out_real) + (bin_out_imag * bin_out_imag)) >> 8; // some divider here
+                //fft_read <= 1'b0;
+                freq_bram_w <= 1'b1;
+                state <= STATE_WRITE_BRAM;
+            end
+
+            STATE_WRITE_BRAM: begin
+                freq_bram_w <= 1'b0;
+                state <= STATE_WAIT_FFT;
+                // increment the counter and wrap it
+                freq_bram_w_addr <= freq_bram_w_addr + 1;
+                if(freq_bram_w_addr == freq_bins -1)
+                    freq_bram_w_addr <= 0;
+            end
+
+        endcase
+    end
+    
+    ///////////////////////////////////////////////////////////////
+    //
+    // draw the bars
+
+
+    // bram addr is calculated from y_px
+    assign freq_bram_r_addr = y_px / bar_height;
+    // request new value at top of bar and left side of screen
+    wire start_of_screen = y_px == 0 && x_px == 0 && activevideo;
+    wire start_of_line = x_px == 0 && activevideo;
+    assign freq_bram_r = bar_height_counter == 0 && start_of_line;
+    // draw the bar if the x_px is below the frequency value
+    assign draw_bar = x_px < freq_bram_out;
+    reg [bar_height_counter_w:0] bar_height_counter = 0;
+
+    // increment bar_height_counter every new line, reset to 0 at top of the screen and after every bar
+    always@(posedge start_of_line) begin
+        bar_height_counter <= bar_height_counter + 1;
+        if(start_of_screen)
+            bar_height_counter <= 0;
+        else if(bar_height_counter == bar_height - 1)
+            bar_height_counter <= 0;
+    end
 
 endmodule

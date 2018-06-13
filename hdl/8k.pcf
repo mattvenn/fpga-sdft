@@ -1,0 +1,44 @@
+###################################
+# Physical constraints file (pcf) #
+# for iCE40HX8K-CT256             #
+###################################
+
+
+### Clock
+set_io clk J3
+
+### LEDs
+set_io --warn-no-port LED[0] B5
+set_io --warn-no-port LED[1] B4
+set_io --warn-no-port LED[2] A2
+set_io --warn-no-port LED[3] A1
+set_io --warn-no-port LED[4] C5
+set_io --warn-no-port LED[5] C4
+set_io --warn-no-port LED[6] B3
+set_io --warn-no-port LED[7] C3
+
+set_io --warn-no-port hsync P1
+set_io --warn-no-port vsync N3
+set_io --warn-no-port vga_r M2
+set_io --warn-no-port vga_g L3
+set_io --warn-no-port vga_b K3
+
+### ADC
+set_io --warn-no-port adc[0] C16
+set_io --warn-no-port adc[1] D16
+set_io --warn-no-port adc[2] E16
+set_io --warn-no-port adc[3] B16
+set_io --warn-no-port adc[4] D14
+set_io --warn-no-port adc[5] D15
+set_io --warn-no-port adc[6] F16
+set_io --warn-no-port adc[7] E14
+
+### UART (FTDI Channel B)
+#set_io RS232_RX_i B10
+#set_io RS232_TX_o B12
+#set_io RTSn       B13
+#set_io CTSn       A15
+#set_io DTRn       A16
+#set_io DSRn       B14
+#set_io DCDn       B15
+
