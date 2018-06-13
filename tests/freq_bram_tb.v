@@ -2,7 +2,7 @@
 `include "tests/top_tb_header.vh"
 module test;
 
-    localparam data_w = 8;
+    localparam data_w = 20;
     localparam addr_w = 7;
     localparam num_tests = 2 ** addr_w;
     integer i;

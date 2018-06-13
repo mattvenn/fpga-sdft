@@ -3,6 +3,7 @@ module sdft
 #(
     parameter data_width = 8, 
     parameter freq_bins = 16,
+    parameter freq_w    = data_width * 2 + 4, // to prevent overflow
     parameter FILE_REAL = "hdl/twiddle_real.list",
     parameter FILE_IMAJ = "hdl/twiddle_imag.list"
 )
@@ -13,8 +14,8 @@ module sdft
     input wire                              read,
     input wire [bin_addr_w-1:0]             bin_addr,
 
-    output reg signed [data_width*2+3:0]                bin_out_real,
-    output reg signed [data_width*2+3:0]                bin_out_imag,
+    output reg signed [freq_w-1:0]          bin_out_real,
+    output reg signed [freq_w-1:0]          bin_out_imag,
     output wire                             ready
 );
 
@@ -23,6 +24,8 @@ module sdft
         bin_out_real <= 0;
         bin_out_imag <= 0;
     end
+
+    reg [15:0] cycles = 0;
 
     // width of addr needed to address the frequency bins
     localparam bin_addr_w = $clog2(freq_bins);
@@ -50,8 +53,8 @@ module sdft
 
 */
     // frequency bins RAM - double width + 2 to handle multiply
-    reg signed [data_width*2+3:0] frequency_bins_real [freq_bins-1:0];
-    reg signed [data_width*2+3:0] frequency_bins_imag [freq_bins-1:0];
+    reg signed [freq_w-1:0] frequency_bins_real [freq_bins-1:0];
+    reg signed [freq_w-1:0] frequency_bins_imag [freq_bins-1:0];
 
     // sample storage
     reg signed [data_width-1:0] samples [freq_bins-1:0];
@@ -105,6 +108,7 @@ module sdft
             end
 
             STATE_START: begin
+                cycles <= cycles + 1; // keep track of how many cycles
                 // get delta: newest - oldest
                 delta <= sample - samples[sample_index];
                 // store new sample
@@ -121,9 +125,11 @@ module sdft
                 end else
                     state <= STATE_WAIT_ROM;
             end
+
             STATE_WAIT_ROM: begin // 3
                 state <= STATE_CALC;
             end
+
             STATE_CALC: begin // 4
                 frequency_bins_real[tw_addr] <= ((frequency_bins_real[tw_addr] + delta) * twid_real - (frequency_bins_imag[tw_addr] * twid_imag)) >>> 7;
                 frequency_bins_imag[tw_addr] <= ((frequency_bins_real[tw_addr] + delta) * twid_imag + (frequency_bins_imag[tw_addr] * twid_real)) >>> 7;

@@ -13,14 +13,10 @@ module top (
 
 );
 
-    localparam freq_bins = 64;
-    localparam freq_data_w = 16;
-    localparam bin_addr_w = $clog2(freq_bins);
-    localparam screen_height = 480;
-    localparam bar_height = screen_height / freq_bins;
-    localparam bar_height_counter_w = $clog2(bar_height);
+    `include "tests/localparams.vh"
 
     reg [6:0] update_counter = 0; // when this wraps we update the frequency bins
+    reg [8:0] read_cycles = 0; // keep track of fft reads -> bram
 
     integer i;
 
@@ -31,17 +27,17 @@ module top (
     wire fft_ready;
     wire fft_clk = px_clk;
     reg fft_start = 0;
-    reg fft_read = 0;
+    wire fft_read; // = 0;
 
     reg [7:0] sample;
 
-    sdft #( .data_width(8), .freq_bins(freq_bins)) sdft_0(.clk (fft_clk), .sample(sample), .ready(fft_ready), .start(fft_start), .read(fft_read), .bin_out_real(bin_out_real), .bin_out_imag(bin_out_imag), .bin_addr(freq_bram_w_addr)); 
+    sdft #( .data_width(data_width), .freq_bins(freq_bins), .freq_w(freq_data_w)) sdft_0(.clk (fft_clk), .sample(sample), .ready(fft_ready), .start(fft_start), .read(fft_read), .bin_out_real(bin_out_real), .bin_out_imag(bin_out_imag), .bin_addr(freq_bram_w_addr)); 
 
     wire px_clk;
     wire activevideo;
     wire draw_bar;
-    assign vga_g = activevideo && draw_bar;
-    assign vga_r = activevideo && draw_bar;
+    assign vga_g = (activevideo && draw_bar) || (y_px < 5);
+    assign vga_r = activevideo && draw_bar; // not connected on the board at the mo
     assign vga_b = activevideo && draw_bar;
 
     VgaSyncGen vga_inst( .clk(clk), .hsync(hsync), .vsync(vsync), .x_px(x_px), .y_px(y_px), .px_clk(px_clk), .activevideo(activevideo));
@@ -61,11 +57,7 @@ module top (
     //
     // run the fft
 
-    localparam STATE_WAIT_FFT   = 0;
-    localparam STATE_WAIT_START = 1;
-    localparam STATE_PROCESS    = 2;
-    localparam STATE_READ       = 3;
-    localparam STATE_WRITE_BRAM = 4;
+    assign fft_read = (state == STATE_PROCESS) && fft_ready;
 
     reg [3:0] state = STATE_WAIT_FFT;
     // sample data as fast as possible
@@ -88,23 +80,22 @@ module top (
                 fft_start <= 1'b0;
                 if(fft_ready) begin
                     update_counter <= update_counter + 1;
-                    if(update_counter == 0 && fft_ready) begin // read the next bank of frequency data into the bram
-                        // increment the counter and wrap it
-                        freq_bram_w_addr <= freq_bram_w_addr + 1;
-                        if(freq_bram_w_addr == freq_bins -1)
-                            freq_bram_w_addr <= 0;
+                    if(update_counter == FFT_READ_CYCLES && fft_ready) begin // read the next bank of frequency data into the bram
+                        update_counter <= 0;
                         // set the read flag
-                        fft_read <= 1'b1;
+                //        fft_read <= 1'b1;
                         state <= STATE_READ;
                     end else
                         state <= STATE_WAIT_FFT;
-                end
+                end else
+                    state <= STATE_PROCESS;
             end
 
             STATE_READ: begin
                 // store the squared bin value to BRAM
-                freq_bram_in <= (bin_out_real * bin_out_real) + (bin_out_imag * bin_out_imag) >> 8; // some divider here
-                fft_read <= 1'b0;
+                read_cycles <= read_cycles + 1;
+                freq_bram_in <= ((bin_out_real * bin_out_real) + (bin_out_imag * bin_out_imag)) >> 8; // some divider here
+                //fft_read <= 1'b0;
                 freq_bram_w <= 1'b1;
                 state <= STATE_WRITE_BRAM;
             end
@@ -112,6 +103,10 @@ module top (
             STATE_WRITE_BRAM: begin
                 freq_bram_w <= 1'b0;
                 state <= STATE_WAIT_FFT;
+                // increment the counter and wrap it
+                freq_bram_w_addr <= freq_bram_w_addr + 1;
+                if(freq_bram_w_addr == freq_bins -1)
+                    freq_bram_w_addr <= 0;
             end
 
         endcase

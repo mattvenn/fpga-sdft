@@ -1,29 +1,30 @@
 [*]
 [*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
-[*] Tue Jun 12 14:09:36 2018
+[*] Wed Jun 13 18:01:04 2018
 [*]
 [dumpfile] "/home/matt/work/fpga/fft/build/freq_bram.vcd"
-[dumpfile_mtime] "Tue Jun 12 14:09:11 2018"
-[dumpfile_size] 49695
+[dumpfile_mtime] "Wed Jun 13 18:00:47 2018"
+[dumpfile_size] 47367
 [savefile] "/home/matt/work/fpga/fft/tests/gtk-freq_bram.gtkw"
 [timestart] 0
 [size] 2018 1021
 [pos] -1 -1
-*-8.000000 1349 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-8.000000 37 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [sst_width] 253
 [signals_width] 376
 [sst_expanded] 1
 [sst_vpaned_height] 306
 @22
+test.freq_bram_0.d_in[19:0]
+@24
 test.freq_bram_0.r_addr[6:0]
-@23
-test.freq_bram_0.w_addr[6:0]
 @22
-test.freq_bram_0.d_in[7:0]
-test.freq_bram_0.d_out[7:0]
+test.freq_bram_0.w_addr[6:0]
 @28
 test.freq_bram_0.r_en
 test.freq_bram_0.w_en
+@23
+test.freq_bram_0.d_out[19:0]
 [pattern_trace] 1
 [pattern_trace] 0

@@ -25,7 +25,6 @@ This is a sliding discrete Fourier transform. It requires two real adds and one 
 
 # Todo
 
-* Implement algo on FPGA
 * Why doesn't makefile build from scratch?
 * Why do freq bin regs overflow almost immediately in the testbench? 
 * How to do scaling - the twiddle factors are scaled to fill the hole register so things overflow quickly

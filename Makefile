@@ -54,6 +54,12 @@ $(SRC_DIR)/twiddle_imag.list: python/gen_twiddle.py
 debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw
 	gtkwave $^
 
+read_sdft_vcd:
+	cd python; python read_vcd.py ../build/sdft.vcd
+
+read_top_vcd:
+	cd python; python read_vcd.py ../build/top.vcd
+
 show-%: $(SRC_DIR)/%.v
 	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed"
 
