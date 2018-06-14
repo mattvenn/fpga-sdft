@@ -44,6 +44,32 @@ representing 40khz.
 1k has 1280 logic cells, and 64kbit bram
 8k has 7680 locic cells, and 128kbit bram
 
+## serial processing
+
+16 * 20 bit bins
+2 * 16 * 16 bit coeffs
+16 * 8 bit sample history
+8 bit sample width
+
+After packing:
+IOs          18 / 206
+GBs          0 / 8
+  GB_IOs     0 / 8
+LCs          4773 / 7680
+  DFF        762
+  CARRY      444
+  CARRY, DFF 42
+  DFF PASS   692
+  CARRY PASS 41
+BRAMs        5 / 32
+WARMBOOTs    0 / 1
+PLLs         1 / 2
+
+timing estimate 18Mhz
+
+Tried pipelining the multiplies for the bram write in top. Makes no difference to timing estimate.
+Tried pipelining the multiplies in the sdft loop, also made no difference to timing estimate.
+
 ## complex output
 
 16 * 16 bit bins,

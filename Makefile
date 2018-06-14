@@ -11,10 +11,12 @@ ICESTORM_DIR = ~/.apio/packages/toolchain-icestorm/bin/
 ICESTORM_DIR = /usr/bin/
 
 MODULES = sdft.v VgaSyncGen.v twiddle_rom.v  freq_bram.v # complex_mult.v
+LIST = twiddle_imag.list twiddle_real.list freq_bram.list
 VERILOG = top.v $(MODULES)
 SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
+LISTS = $(addprefix $(SRC_DIR)/, $(LIST))
 
-all: $(SRC_DIR)/twiddle_imag.list $(PROJ).bin $(PROJ).rpt 
+all: $(PROJ).bin $(PROJ).rpt 
 
 # fft configuration in localparams.vh
 PARAMS = $(TEST_DIR)/localparams.vh
@@ -51,10 +53,10 @@ $(BUILD_DIR)/%.vcd: $(BUILD_DIR)/%.out
 prog: $(PROJ).bin
 	iceprog $<
 
-$(SRC_DIR)/twiddle_imag.list: python/gen_twiddle.py $(PARAMS)
+list:
 	cd hdl; ../python/gen_twiddle.py ../$(PARAMS)
 
-debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw
+debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw $(PARAMS)
 	gtkwave $^
 
 read_sdft_vcd:
@@ -68,6 +70,7 @@ show-%: $(SRC_DIR)/%.v
 
 clean:
 	rm -f $(BUILD_DIR)/*
+#	rm -f $(SRC_DIR)/*list
 
 #secondary needed or make will remove useful intermediate files
 .SECONDARY:

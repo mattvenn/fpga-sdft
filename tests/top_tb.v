@@ -23,7 +23,7 @@ module test;
             $dumpvars(3, top_0.sdft_0.frequency_bins_imag[i]);
         end
 
-        while(top_0.read_cycles < freq_bins) begin
+        while(top_0.read_cycles < freq_bins * 2) begin
             for (i = 0; i < 2; i = i + 1) begin
                 for (j = 0; j < 3; j = j + 1) begin
                     sample <= sample_low;

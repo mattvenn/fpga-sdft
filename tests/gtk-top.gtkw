@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.66 (w)1999-2015 BSI
-[*] Wed Jun 13 18:12:56 2018
+[*] Thu Jun 14 16:26:05 2018
 [*]
 [dumpfile] "/home/matt/work/fpga/fft/build/top.vcd"
-[dumpfile_mtime] "Wed Jun 13 18:12:08 2018"
-[dumpfile_size] 2585572
+[dumpfile_mtime] "Thu Jun 14 16:25:31 2018"
+[dumpfile_size] 768551
 [savefile] "/home/matt/work/fpga/fft/tests/gtk-top.gtkw"
-[timestart] 306
+[timestart] 0
 [size] 2512 1541
 [pos] 523 328
-*-4.993412 431 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-11.993412 14940 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] test.
 [treeopen] test.top_0.
 [treeopen] test.top_0.sdft_0.
@@ -22,6 +22,7 @@ test.top_0.clk
 test.top_0.px_clk
 test.top_0.activevideo
 test.top_0.hsync
+test.top_0.vsync
 @24
 test.top_0.x_px[9:0]
 test.top_0.y_px[9:0]
@@ -32,17 +33,16 @@ test.top_0.start_of_line
 test.top_0.start_of_screen
 @200
 -
+@23
+test.top_0.update_counter[6:0]
 @24
 test.top_0.sdft_0.sample[7:0]
 @28
 test.top_0.freq_bram_w
 @24
 test.top_0.freq_bram_r
-test.top_0.freq_bram_r_addr[4:0]
 [color] 5
-test.top_0.freq_bram_w_addr[4:0]
 test.top_0.freq_bram_r_clk
-test.top_0.update_counter[6:0]
 @200
 -
 -
@@ -69,8 +69,6 @@ test.top_0.sdft_0.state[3:0]
 @28
 test.top_0.sdft_0.start
 test.top_0.sdft_0.ready
-@24
-test.top_0.sdft_0.tw_addr[4:0]
 @420
 test.top_0.sdft_0.\frequency_bins_real[0][19:0]
 @c00420
@@ -105,13 +103,7 @@ test.top_0.sdft_0.\frequency_bins_real[2][19:0]
 test.top_0.sdft_0.\frequency_bins_imag[2][19:0]
 test.top_0.sdft_0.\frequency_bins_real[3][19:0]
 test.top_0.sdft_0.\frequency_bins_imag[3][19:0]
-test.top_0.sdft_0.\frequency_bins_real[8][19:0]
-test.top_0.sdft_0.\frequency_bins_imag[8][19:0]
-@22
-test.top_0.sdft_0.bin_addr[3:0]
-@420
 test.top_0.sdft_0.bin_out_real[19:0]
-@421
 test.top_0.sdft_0.bin_out_imag[19:0]
 @200
 -
