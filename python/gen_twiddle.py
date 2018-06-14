@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
+import sys
+from parse_verilog_header import ParseParams
 import math
-N = 32
-width = 8
+
+if len(sys.argv) != 2:
+    exit("give params file as first arg")
+
+params = ParseParams(sys.argv[1]).parse()
+N = params['freq_bins']
+width = params['data_width']
+
 max_val = (2 ** width - 1)/2
 
 

@@ -3,13 +3,13 @@ module sdft
 #(
     parameter data_width = 8, 
     parameter freq_bins = 16,
-    parameter freq_w    = data_width * 2 + 4, // to prevent overflow
+    parameter freq_w    = 20, // to prevent overflow
     parameter FILE_REAL = "hdl/twiddle_real.list",
     parameter FILE_IMAJ = "hdl/twiddle_imag.list"
 )
 (
     input wire                              clk,
-    input wire signed [data_width-1:0]      sample,
+    input wire [data_width-1:0]      sample,
     input wire                              start,
     input wire                              read,
     input wire [bin_addr_w-1:0]             bin_addr,
@@ -31,7 +31,7 @@ module sdft
     localparam bin_addr_w = $clog2(freq_bins);
 
     // register for the twiddle factor ROM
-    reg [bin_addr_w:0] tw_addr;
+    reg [bin_addr_w-1:0] tw_addr;
 
     // register for sample index
     reg [bin_addr_w-1:0] sample_index;
@@ -57,7 +57,7 @@ module sdft
     reg signed [freq_w-1:0] frequency_bins_imag [freq_bins-1:0];
 
     // sample storage
-    reg signed [data_width-1:0] samples [freq_bins-1:0];
+    reg [data_width-1:0] samples [freq_bins-1:0];
 
     // delta storage (1 more than data_width to handle subtraction)
     reg signed [data_width:0] delta;

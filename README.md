@@ -26,10 +26,11 @@ This is a sliding discrete Fourier transform. It requires two real adds and one 
 * Why do freq bin regs overflow almost immediately in the testbench? scaling
 * How to do scaling - the twiddle factors are scaled to fill the hole register so things overflow quickly, divide by 127
 * Why doesn't pnr work? - it does, but the module wasn't being used so yosys was removing it
+* make the python tools parse test/localparams.vh  - very basic but works OK
 
 # Todo
 
-* make the python tools parse test/localparams.vh 
+* how to deal with timing analysis being lower than the clock I'm using
 
 # Resources
 

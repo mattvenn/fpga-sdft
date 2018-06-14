@@ -33,6 +33,9 @@ set_io --warn-no-port adc[5] D15
 set_io --warn-no-port adc[6] F16
 set_io --warn-no-port adc[7] E14
 
+### GPIO
+set_io --warn-no-port gpio[0] G16
+set_io --warn-no-port gpio[1] F15
 ### UART (FTDI Channel B)
 #set_io RS232_RX_i B10
 #set_io RS232_TX_o B12

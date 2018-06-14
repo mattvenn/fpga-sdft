@@ -3,15 +3,22 @@ from pprint import pprint;
 from Verilog_VCD import parse_vcd
 import struct
 import sys
-N = 32
-data_width = 8
-freq_d_width = data_width * 2 + 4 # to prevent overflow
+from parse_verilog_header import ParseParams
 
-if len(sys.argv) != 2:
-    exit("give vcd as first arg")
+if len(sys.argv) != 3:
+    exit("give vcd as first arg, params as 2nd")
+
+params = ParseParams(sys.argv[2]).parse()
+
+N = params['freq_bins']
+data_width = params['data_width']
+freq_d_width = params['freq_data_w']
+
+
 print("N: %d, data width: %d, freq width %d" % (N, data_width, freq_d_width))
 
 vcd = parse_vcd(sys.argv[1])
+
 def twos_comp(val, bits):
     """compute the 2's complement of int value val"""
     if (val & (1 << (bits - 1))) != 0: # if sign bit is set e.g., 8bit: 128-255
@@ -93,9 +100,10 @@ if plot_last:
 
     # bram
     if ram[0] is not None:
+        ram_len = len(ram[0])
         points = []
         for n in range(N):
-            points.append(ram[n][16])
+            points.append(ram[n][ram_len-1])
         plt.plot(range(N), points)
 
 if plot_all or plot_last:

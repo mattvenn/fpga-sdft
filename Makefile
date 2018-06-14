@@ -16,6 +16,9 @@ SRC = $(addprefix $(SRC_DIR)/, $(VERILOG))
 
 all: $(SRC_DIR)/twiddle_imag.list $(PROJ).bin $(PROJ).rpt 
 
+# fft configuration in localparams.vh
+PARAMS = $(TEST_DIR)/localparams.vh
+
 # $@ The file name of the target of the rule.rule
 # $< first pre requisite
 # $^ names of all preerquisites
@@ -48,17 +51,17 @@ $(BUILD_DIR)/%.vcd: $(BUILD_DIR)/%.out
 prog: $(PROJ).bin
 	iceprog $<
 
-$(SRC_DIR)/twiddle_imag.list: python/gen_twiddle.py
-	cd hdl; ../python/gen_twiddle.py
+$(SRC_DIR)/twiddle_imag.list: python/gen_twiddle.py $(PARAMS)
+	cd hdl; ../python/gen_twiddle.py ../$(PARAMS)
 
 debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw
 	gtkwave $^
 
 read_sdft_vcd:
-	cd python; python read_vcd.py ../build/sdft.vcd
+	cd python; python read_vcd.py ../build/sdft.vcd ../$(PARAMS)
 
 read_top_vcd:
-	cd python; python read_vcd.py ../build/top.vcd
+	cd python; python read_vcd.py ../build/top.vcd ../$(PARAMS)
 
 show-%: $(SRC_DIR)/%.v
 	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed"

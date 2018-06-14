@@ -1,8 +1,8 @@
 // fft settings
-localparam freq_bins = 32;
+localparam freq_bins = 16;
 localparam bin_addr_w = $clog2(freq_bins);
 localparam data_width = 8;
-localparam freq_data_w = data_width * 2 + 4; // to prevent overflow
+localparam freq_data_w = 20; // to prevent overflow with multiplies and adds
 
 // test settings
 localparam sample_low = 20;

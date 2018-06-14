@@ -4,6 +4,7 @@ module top (
 	input  clk,
     output LED,
     input [7:0] adc,
+    output [1:0] gpio,
     output adc_clk,
     output hsync,
     output vsync,
@@ -42,8 +43,8 @@ module top (
 
     VgaSyncGen vga_inst( .clk(clk), .hsync(hsync), .vsync(vsync), .x_px(x_px), .y_px(y_px), .px_clk(px_clk), .activevideo(activevideo));
 
-    reg [bin_addr_w:0] freq_bram_w_addr = 0;
-    wire [bin_addr_w:0] freq_bram_r_addr;
+    reg [bin_addr_w-1:0] freq_bram_w_addr = 0;
+    wire [bin_addr_w-1:0] freq_bram_r_addr;
     wire [freq_data_w-1:0] freq_bram_out;
     reg [freq_data_w-1:0] freq_bram_in = 0;
     reg freq_bram_w = 0; // write enable signal
@@ -57,6 +58,8 @@ module top (
     //
     // run the fft
     assign fft_read = (state == STATE_PROCESS) && fft_ready;
+    assign gpio[0] = (state == STATE_WAIT_START); // purple tracae
+    assign gpio[1] = (state == STATE_WRITE_BRAM); // blue trace
 
     reg [3:0] state = STATE_WAIT_FFT;
     // sample data as fast as possible
@@ -81,8 +84,8 @@ module top (
                     update_counter <= update_counter + 1;
                     if(update_counter == FFT_READ_CYCLES && fft_ready) begin // read the next bank of frequency data into the bram
                         update_counter <= 0;
-                        // set the read flag
-                //        fft_read <= 1'b1;
+                        // read flag set by wire assignment instead to meet timing
+                        //        fft_read <= 1'b1;
                         state <= STATE_READ;
                     end else
                         state <= STATE_WAIT_FFT;
