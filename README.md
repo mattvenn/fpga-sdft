@@ -27,6 +27,7 @@ This is a sliding discrete Fourier transform. It requires two real adds and one 
 * How to do scaling - the twiddle factors are scaled to fill the hole register so things overflow quickly, divide by 127
 * Why doesn't pnr work? - it does, but the module wasn't being used so yosys was removing it
 * make the python tools parse test/localparams.vh  - very basic but works OK
+* adc connected, pinout is correct. sampleing has to be done on clock negedge
 
 # Todo
 
@@ -40,3 +41,5 @@ This is a sliding discrete Fourier transform. It requires two real adds and one 
 * sliding FFT https://www.dsprelated.com/showarticle/776.php
 * stackoverflow answer about sdft: https://stackoverflow.com/questions/6663222/doing-fft-in-realtime
 * paper on SDFT: http://www.comm.toronto.edu/~dimitris/ece431/slidingdft.pdf
+* http://www.analog.com/media/en/technical-documentation/data-sheets/AD9283.pdf
+

@@ -6,6 +6,7 @@ module top (
     input [7:0] adc,
     output [1:0] gpio,
     output adc_clk,
+    output adc_shutdown,
     output hsync,
     output vsync,
     output vga_r,
@@ -30,7 +31,8 @@ module top (
     reg fft_start = 0;
     wire fft_read; // = 0;
 
-    reg [7:0] sample;
+    reg [7:0] sample = 0;
+    reg [7:0] temp_sample = 0;
 
     sdft #( .data_width(data_width), .freq_bins(freq_bins), .freq_w(freq_data_w)) sdft_0(.clk (fft_clk), .sample(sample), .ready(fft_ready), .start(fft_start), .read(fft_read), .bin_out_real(bin_out_real), .bin_out_imag(bin_out_imag), .bin_addr(freq_bram_w_addr)); 
 
@@ -55,9 +57,16 @@ module top (
     freq_bram #(.addr_w(bin_addr_w), .data_w(freq_data_w)) freq_bram_0(.w_clk(freq_bram_w_clk), .r_clk(freq_bram_r_clk), .w_en(freq_bram_w), .r_en(freq_bram_r), .d_in(freq_bram_in), .d_out(freq_bram_out), .r_addr(freq_bram_r_addr), .w_addr(freq_bram_w_addr));
 
     ///////////////////////////////////////////////////////////////
+    // adc
+    assign adc_shutdown = 0;
+    assign adc_clk = clk;
+    always @(negedge adc_clk)
+        temp_sample <= adc;
+
+    ///////////////////////////////////////////////////////////////
     //
     // run the fft
-    assign fft_read = (state == STATE_PROCESS) && fft_ready;
+    assign fft_read = (state == STATE_PROCESS) && fft_ready && ! activevideo;
     assign gpio[0] = (state == STATE_WAIT_START); // purple tracae
     assign gpio[1] = (state == STATE_WRITE_BRAM); // blue trace
 
@@ -67,7 +76,7 @@ module top (
         case(state)
             STATE_WAIT_FFT: begin
                 if(fft_ready) begin
-                    sample <= adc;
+                    sample <= temp_sample;
                     fft_start <= 1'b1;
                     state <= STATE_WAIT_START;
                 end
@@ -82,7 +91,7 @@ module top (
                 fft_start <= 1'b0;
                 if(fft_ready) begin
                     update_counter <= update_counter + 1;
-                    if(update_counter == FFT_READ_CYCLES && fft_ready) begin // read the next bank of frequency data into the bram
+                    if(update_counter == FFT_READ_CYCLES && ! activevideo) begin // read the next bank of frequency data into the bram
                         update_counter <= 0;
                         // read flag set by wire assignment instead to meet timing
                         //        fft_read <= 1'b1;
@@ -117,7 +126,6 @@ module top (
     ///////////////////////////////////////////////////////////////
     //
     // draw the bars
-
 
     // bram addr is calculated from y_px
     assign freq_bram_r_addr = y_px / bar_height;
