@@ -33,6 +33,23 @@ This is a sliding discrete Fourier transform. It requires two real adds and one 
 
 * how to deal with timing analysis being lower than the clock I'm using
 
+# FPGA resources used
+
+Using an 8k device:
+
+    IOs          18 / 206
+    GBs          0 / 8
+      GB_IOs     0 / 8
+    LCs          3619 / 7680
+      DFF        120
+      CARRY      512
+      CARRY, DFF 39
+      DFF PASS   86
+      CARRY PASS 165
+    BRAMs        13 / 32
+    WARMBOOTs    0 / 1
+    PLLs         1 / 2
+
 # Resources
 
 * great video that explains what the Fourier transform is: https://www.youtube.com/watch?v=spUNpyF58BY
