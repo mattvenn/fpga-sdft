@@ -2,7 +2,6 @@
 
 module top (
 	input  clk,
-    output LED,
     input [7:0] adc,
     output [1:0] gpio,
     output adc_clk,
