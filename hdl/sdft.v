@@ -1,7 +1,32 @@
 `default_nettype none
+/*
+    SDFT module: sliding DFT. See http://www.comm.toronto.edu/~dimitris/ece431/slidingdft.pdf for more details.
+    The SDFT is not as efficient as an FFT to calculate an entire range, but can have arbitary numbers of bins 
+    (not powers of 2), and single bins can be calculated, so in some cases it can be more efficient.
+
+    The module has been tested against the Python numpy fft routine.
+
+    Interface:
+
+    clk         input clock. everything is done on rising edge.
+    sample      input data. Width is set with data_width parameter
+    start       start the process. If you have 32 bins, this will take 98 clocks (3 clocks per bin + 2 setup)
+    read        when in idle will put the contents of the given frequency bin on bin_out_real and bin_out_imag
+    bin_addr    which bin to read - value from 0 to bins-1
+    ready       when sdft is in idle state - can now start or read
+
+    Parameters: 
+
+    data_width  how wide the input sample data is
+    freq_bins   how many bins to calculate
+    freq_w      how wide the frequency data should be
+    FILE_REAL   real twiddle factors for each bin
+    FILE_IMAG   imag twiddle factors for each bin. See python/gen_twiddle.py for generation of these files.
+
+*/
 module sdft
 #(
-    parameter data_width = 8, 
+    parameter data_width = 8,   
     parameter freq_bins = 16,
     parameter freq_w    = 20, // to prevent overflow
     parameter FILE_REAL = "hdl/twiddle_real.list",
@@ -9,7 +34,7 @@ module sdft
 )
 (
     input wire                              clk,
-    input wire [data_width-1:0]      sample,
+    input wire [data_width-1:0]             sample,
     input wire                              start,
     input wire                              read,
     input wire [bin_addr_w-1:0]             bin_addr,
