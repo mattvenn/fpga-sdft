@@ -43,7 +43,7 @@ $(BUILD_DIR)/%.rpt: $(BUILD_DIR)/%.asc
 	icetime -d $(DEVICE) -mtr $@ $<
 
 # rules for simple tests with one verilog module per test bench
-$(BUILD_DIR)/%.out: $(TEST_DIR)/%_tb.v $(SRC)
+$(BUILD_DIR)/%.out: $(TEST_DIR)/%_tb.v $(SRC) list
 	iverilog -o $(basename $@).out $^
 
 $(BUILD_DIR)/%.vcd: $(BUILD_DIR)/%.out 
@@ -56,14 +56,17 @@ prog: $(PROJ).bin
 list:
 	cd hdl; ../python/gen_twiddle.py ../$(PARAMS)
 
-debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw $(PARAMS)
+model-sdft:
+	cd python; python3 sdft.py
+
+debug-%: $(BUILD_DIR)/%.vcd $(TEST_DIR)/gtk-%.gtkw $(PARAMS) list
 	gtkwave $^
 
-read_sdft_vcd:
-	cd python; python read_vcd.py ../build/sdft.vcd ../$(PARAMS)
+read-sdft-vcd:
+	cd python; python3 read_vcd.py ../build/sdft.vcd ../$(PARAMS)
 
-read_top_vcd:
-	cd python; python read_vcd.py ../build/top.vcd ../$(PARAMS)
+read-top-vcd:
+	cd python; python3 read_vcd.py ../build/top.vcd ../$(PARAMS)
 
 show-%: $(SRC_DIR)/%.v
 	yosys -p "read_verilog $<; proc; opt; show -colors 2 -width -signed"

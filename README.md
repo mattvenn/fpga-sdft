@@ -12,8 +12,11 @@ This is a sliding discrete Fourier transform. It requires two real adds and one 
 
 # Makefile
 
+* make list - compute the twiddle factor tables
 * make show-sdft - use yosys show to see how the design is inferred
 * make debug-sdft - use iverilog, vvp and gtkwave to show the results of the testbench
+* make read-sdft-vcd - after vcd generated, use Python script to read the vcd and plot the last set of results computed
+* make model-sdft - model sdft in python and compare against numpy's fft
 * make - build everything
 * make prog - program the icestick
 
